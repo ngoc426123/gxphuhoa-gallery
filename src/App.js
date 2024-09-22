@@ -1,4 +1,5 @@
 import { Outlet } from "react-router-dom";
+import Loading from "./modules/Loading";
 
 function App() {
   // CLASS
@@ -9,6 +10,7 @@ function App() {
   return (
     <div id="App" className={cls.app}>
       <Outlet />
+      <Loading />
     </div>
   );
 }

@@ -22,8 +22,8 @@ export function Alert(props) {
 
   // CLASS
   const cls = {
-    modal: 'flex items-center justify-center px-5 w-screen h-screen text-center fixed top-0 left-0 z-50',
-    overlay: 'w-full h-full bg-skyline-400/60 absolute top-0 left-0 z-0',
+    modal: 'flex items-center justify-center w-screen h-screen px-5 text-center fixed top-0 left-0 z-40',
+    overlay: 'w-full h-full bg-sky-950/60 absolute top-0 left-0 z-0',
     inner: 'inline-block w-full max-w-xl px-10 py-12 rounded-lg bg-stone-50 relative z-10',
     statusIcon: 'mb-8',
     icon: clsx('size-20', {

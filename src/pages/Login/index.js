@@ -5,8 +5,13 @@ import { Form } from "../../components/commons/Form";
 import { Alert } from "../../components/Alert";
 import { useNavigate } from "react-router-dom";
 
+// REDUX
+import { useDispatch } from "react-redux";
+import { setOpenLoading, setUserAuthor } from "../../store/root";
+
 // IMAGES
 import Cover_img from "../../assets/images/cover.jpg";
+import Logo_img from "../../assets/images/logo.png";
 import { setLocalstorage } from "../../utils/localstorage";
 
 const _ERROR_DEFINE = {
@@ -22,6 +27,7 @@ const _ERROR_DEFINE = {
 
 export default function Login() {
   // STATE
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -55,11 +61,13 @@ export default function Login() {
       return;
     }
 
+    dispatch(setOpenLoading(true));
     try {
-      const url = process.env.REACT_APP_LOGIN_API;
+      const url = process.env.REACT_APP_LOGIN_API + '/gallery-login';
       const params = { username, password };
       const { data } = await axios.post(url, params);
 
+      dispatch(setUserAuthor(true));
       setLocalstorage('Gxphuhoa-user', data.data);
       setAlert({
         open: true,
@@ -74,16 +82,19 @@ export default function Login() {
         ..._ERROR_DEFINE[error.response.data.code]
       });
     }
+    dispatch(setOpenLoading(false));
   };
 
   // CLASS
   const cls = {
     wrap: 'flex items-center justify-center w-full h-screen overflow-hidden',
     cover: 'w-1/2 h-full',
+    logo: 'size-32 mb-6 drop-shadow-2xl',
+    logoImage: '',
     coverImage: 'w-full h-full object-cover',
     loginBox: 'flex items-center justify-center flex-col w-1/2 h-full px-5',
     headingBox: 'text-lg font-thin',
-    descBox: 'mb-14 text-4xl leading-tight font-bold',
+    descBox: 'mb-14 text-3xl font-bold',
     noteBox: 'mb-3 font-thin text-stone-500',
     gxLink: 'text-cyan-400',
     formBox: 'w-full max-w-80',
@@ -97,8 +108,11 @@ export default function Login() {
           <img className={cls.coverImage} src={Cover_img} alt=""/>
         </div>
         <div className={cls.loginBox}>
-          <h2 className={cls.headingBox}>Giáo Xứ Phú Hoà</h2>
-          <div className={cls.descBox}>Thư viện ảnh</div>
+          <div className={cls.logo}>
+            <img src={Logo_img} className={cls.logoImage} alt="Giáo Xứ Phú Hoà"/>
+          </div>
+          <h2 className={cls.headingBox}>GIÁO XỨ PHÚ HOÀ</h2>
+          <div className={cls.descBox}>Thư Viện Ảnh</div>
           <div className={cls.noteBox}>* Sử dụng tài khoản <a className={cls.gxLink} href="https://gxphuhoa.org/admin" title="Admin Gx Phú Hoà">Gx Phú Hoà</a> để đăng nhập</div>
           <div className={cls.formBox}>
             <Form.Input
