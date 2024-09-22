@@ -2,7 +2,7 @@ import clsx from "clsx";
 
 export default function Cta(props) {
   // PROPS
-  const {href, style, type, block, onClick, children} = props;
+  const {href, ctaStyle, type, block, onClick, customClass, children} = props;
 
   // CLASS
   const cls = {
@@ -13,8 +13,10 @@ export default function Cta(props) {
       },
       'px-8 py-3 text-base text-center rounded-full transition-all',
       {
-        'text-stone-100 bg-skyline-400 border border-skyline-400 hover:bg-skyline-300 hover:border-skyline-400': !style,
+        'text-slate-100 bg-gradient-to-r from-blue-600 to-purple-600 hover:shadow-lg hover:shadow-indigo-500/50': !ctaStyle,
+        'text-slate-100 bg-slate-600 hover:shadow-lg hover:shadow-slate-500/40': ctaStyle === 'dark',
       },
+      customClass,
     )
   }
 

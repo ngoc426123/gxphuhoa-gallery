@@ -3,7 +3,7 @@ import { Outlet } from "react-router-dom";
 function App() {
   // CLASS
   const cls = {
-    app: 'max-w-full min-h-screen bg-stone-100'
+    app: 'max-w-full min-h-screen bg-slate-100'
   }
   // RENDER
   return (
