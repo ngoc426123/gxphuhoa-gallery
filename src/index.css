@@ -1,3 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.custom-input-password::-ms-reveal,
+.custom-input-password::-ms-clear {
+  display: none;
+}
