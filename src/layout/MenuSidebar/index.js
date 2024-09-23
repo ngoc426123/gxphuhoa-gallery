@@ -60,28 +60,29 @@ export default function MenuSidebar() {
   return (
     <div className={cls.wrap}>
       <ul>
-        {menuItems && menuItems.map(item => (
-          <li className={cls.li}>
+        {menuItems && menuItems.map((item, index) => (
+          <li className={cls.li} key={index}>
             {item.link
               ? <NavLink
-                to={item.link}
-                className={({ isActive }) => `${cls.item} ${isActive ? cls.itemActive : null}`}
-              >
-                <span className={cls.icon}>
-                  <FontAwesomeIcon icon={item.icon}/>
-                </span>
-                <span>{item.menu}</span>
-              </NavLink>
+                  to={item.link}
+                  className={({ isActive }) => `${cls.item} ${isActive ? cls.itemActive : null}`}
+                >
+                  <span className={cls.icon}>
+                    <FontAwesomeIcon icon={item.icon}/>
+                  </span>
+                  <span>{item.menu}</span>
+                </NavLink>
               : <a
-                href="#logou"
-                onClick={item.onClick}
-                className={cls.item}
-              >
-                <span className={cls.icon}>
-                  <FontAwesomeIcon icon={item.icon}/>
-                </span>
-                <span>{item.menu}</span>
-              </a>}
+                  href="#logou"
+                  onClick={item.onClick}
+                  className={cls.item}
+                >
+                  <span className={cls.icon}>
+                    <FontAwesomeIcon icon={item.icon}/>
+                  </span>
+                  <span>{item.menu}</span>
+                </a>
+            }
           </li>
         ))}
       </ul>

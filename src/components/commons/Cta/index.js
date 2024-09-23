@@ -15,9 +15,10 @@ export default function Cta(props) {
       {
         'text-slate-100 bg-gradient-to-r from-blue-600 to-purple-600 hover:shadow-lg hover:shadow-indigo-500/50': !ctaStyle,
         'text-slate-100 bg-slate-600 hover:shadow-lg hover:shadow-slate-500/40': ctaStyle === 'dark',
+        'text-blue-600 border border-blue-600 !rounded hover:bg-blue-600/5': ctaStyle === 'outline',
       },
       customClass,
-    )
+    ),
   }
 
   // RENDER
