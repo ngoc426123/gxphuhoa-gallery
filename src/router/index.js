@@ -10,6 +10,8 @@ import BaseLayout from "../layout/BaseLayout";
 // PAGES
 import Login from "../pages/Login";
 import Dashbroad from "../pages/Dashbroad";
+import Albums from "../pages/Albums";
+import Config from "../pages/Config";
 
 const router = createBrowserRouter([
   {
@@ -23,6 +25,14 @@ const router = createBrowserRouter([
           {
             path: '',
             element: <Dashbroad />,
+          },
+          {
+            path: '/albums',
+            element: <Albums />,
+          },
+          {
+            path: '/config',
+            element: <Config />,
           }
         ]
       },
