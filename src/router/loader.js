@@ -8,7 +8,7 @@ export const rootLoader = async () => {
   if (!getLocalstorage('Gxphuhoa-user'))
     return redirect('/login');
 
-  // USER AUTHENTICATOR
+  // USER AUTHORIZATION
   const { root: { userAuthor } } = store.getState();
 
   if (userAuthor) return null;
@@ -25,12 +25,15 @@ export const rootLoader = async () => {
     return redirect('/login');
   }
 
+  // EVERYTHING IS OK
   return null;
 }
 
 export const loginLoader = () => {
+  // EXIST USER -> NOT NEED LOGIN
   if (getLocalstorage('Gxphuhoa-user'))
     return redirect('/');
 
+  // EVERYTHING IS OK
   return null;
 }

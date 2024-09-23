@@ -1,8 +1,11 @@
 import { createBrowserRouter } from "react-router-dom";
 import { loginLoader, rootLoader } from "./loader";
 
-// LAYOUT
+// APP
 import App from "../App";
+
+// LAYOUT
+import BaseLayout from "../layout/BaseLayout";
 
 // PAGES
 import Login from "../pages/Login";
@@ -14,9 +17,14 @@ const router = createBrowserRouter([
     element: <App />,
     children: [
       {
-        path: '',
-        element: <Dashbroad />,
+        element: <BaseLayout />,
         loader: rootLoader,
+        children: [
+          {
+            path: '',
+            element: <Dashbroad />,
+          }
+        ]
       },
       {
         path: '/login',
