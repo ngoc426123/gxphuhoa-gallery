@@ -8,5 +8,6 @@ export const store = configureStore({
   reducer: {
     root,
     uploadfiles,
-  }
+  },
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware({  serializableCheck: false }),
 });

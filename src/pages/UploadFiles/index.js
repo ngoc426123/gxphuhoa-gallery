@@ -1,25 +1,36 @@
-import { useDropzone } from "react-dropzone"
+import { useEffect, useState } from "react";
+
+// COMPONENT
+import { Form } from "../../components/commons/Form";
 
 export default function UploadFiles() {
-  // METHOD
-  const handleEventGetFileFromEvent = (e) => {
-    console.log(e);
-  }
+  // STATE
+  const [albumTitle, setAlbumTitle] = useState('');
 
-  // DROP ZONE
-  const { acceptedFiles } = useDropzone({
-    getFilesFromEvent: handleEventGetFileFromEvent,
-  });
-  const files = acceptedFiles.map(f => (
-    <li key={f.name}>
-      {f.name} has <strong>myProps</strong>: {f.myProp === true ? 'YES' : ''}
-    </li>
-  ));
+  // SIDE EFFECT
+  useEffect(() => {
+    if (!albumTitle) return;
+
+    document.title = `${albumTitle !== '' ? albumTitle + ' -' : ''} Thư viện ảnh - Giáo Xứ Phú Hoà`;
+  }, [albumTitle]);
+
+  // CLASS
+  const cls = {
+    inputTitle: 'w-full mb-10',
+    customClassInput: 'text-2xl px-0 border-b border-slate-400 bg-transparent rounded-none',
+  };
 
   // RENDER
   return (
     <div className="">
-      {files}
+      <div className={cls.inputTitle}>
+        <Form.Input
+          name="albumTitle"
+          placeholder="Tên album..."
+          onChange={e => setAlbumTitle(e.target.value)}
+          customClassInput={cls.customClassInput}
+        />
+      </div>
     </div>
   )
 }
