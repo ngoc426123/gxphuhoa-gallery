@@ -12,6 +12,7 @@ import Login from "../pages/Login";
 import Dashbroad from "../pages/Dashbroad";
 import Albums from "../pages/Albums";
 import Config from "../pages/Config";
+import UploadFiles from "../pages/UploadFiles";
 
 const router = createBrowserRouter([
   {
@@ -33,6 +34,10 @@ const router = createBrowserRouter([
           {
             path: '/config',
             element: <Config />,
+          },
+          {
+            path: '/upload-files',
+            element: <UploadFiles />
           }
         ]
       },

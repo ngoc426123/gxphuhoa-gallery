@@ -2,7 +2,8 @@ import { Outlet } from "react-router-dom";
 import Sidebar from "../Sidebar";
 
 // COMPONENT
-import UploadTopbar from "../../components/UploadTopbar";
+import UploadTopbar from "../../modules/UploadTopbar";
+import UploadProgressPopup from "../../modules/UploadProgressPopup";
 
 export default function BaseLayout() {
   // CLASS
@@ -15,16 +16,19 @@ export default function BaseLayout() {
 
   // RENDER
   return (
-    <div className={cls.layout} data-base-layout>
-      <Sidebar />
-      <div className={cls.sideContent}>
-        <div className={cls.topBar}>
-          <UploadTopbar />
-        </div>
-        <div className={cls.mainContent}>
-          <Outlet />
+    <>
+      <div className={cls.layout} data-base-layout>
+        <Sidebar />
+        <div className={cls.sideContent}>
+          <div className={cls.topBar}>
+            <UploadTopbar />
+          </div>
+          <div className={cls.mainContent}>
+            <Outlet />
+          </div>
         </div>
       </div>
-    </div>
+      <UploadProgressPopup />
+    </>
   )
 }
