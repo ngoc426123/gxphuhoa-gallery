@@ -25,6 +25,7 @@ export default function ListImages(props) {
           key={index}
           className={cls.imageItem}
           onClick={() => onSelectImage(item)}
+          data-image={item.id}
         >
           <img
             src={item.src}

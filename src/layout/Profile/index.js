@@ -23,7 +23,8 @@ export default function Profile() {
         <img src={Avatar_img} alt={user?.display_name || ''} />
       </div>
       <div>
-        <p className={cls.name}>Xin chào <strong>{user?.display_name || ''}</strong></p>
+        <p className={cls.name}>Xin chào</p>
+        <p className={cls.name}><strong>{user?.display_name || ''}</strong></p>
         <p className={cls.email}>{user?.user_email || ''}</p>
       </div>
     </div>
