@@ -8,7 +8,7 @@ import MenuSidebar from "../MenuSidebar";
 export default function Sidebar() {
   // CLASS
   const cls = {
-    sidebar: 'w-75 h-full px-5 py-8 bg-slate-950 shadow-2xl shadow-slate-950/50 relative shrink-0',
+    sidebar: 'w-72 h-full px-5 py-8 bg-slate-950 shadow-2xl shadow-slate-950/50 relative z-40 shrink-0',
     txtLogo: 'pb-6 mb-6 text-xl font-bold text-slate-100 border-b border-b-slate-600/70',
     bgOverlay: 'absolute top-0 right-0 bottom-0 left-0 pointer-events-none opacity-15'
   }

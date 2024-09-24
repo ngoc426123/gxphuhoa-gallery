@@ -12,7 +12,7 @@ import { faUpload } from "@fortawesome/free-solid-svg-icons";
 import { useDispatch } from "react-redux";
 import { setFiles, setOpenProgressPopup } from "../../store/uploadfiles";
 
-export default function UploadTopbar() {
+export default function UploadButtonTopbar() {
   // STATE
   const dispatch = useDispatch();
   const navigate = useNavigate();

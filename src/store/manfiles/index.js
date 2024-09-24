@@ -20,11 +20,15 @@ export const manfiles = createSlice({
       state.files.push({...action.payload, selected: true});
     },
 
+    clearFiles: (state) => {
+      state.files = [];
+    },
+
     setOpenManPopup: (state, action) => {
       state.openManPopup = action.payload
     }
   },
 });
 
-export const { selectFile, setOpenManPopup } = manfiles.actions;
+export const { selectFile, clearFiles, setOpenManPopup } = manfiles.actions;
 export default manfiles.reducer;
