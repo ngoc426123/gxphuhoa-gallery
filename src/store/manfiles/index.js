@@ -9,8 +9,15 @@ export const manfiles = createSlice({
   name: 'manfiles',
   initialState,
   reducers: {
-    setFiles: (state, action) => {
-      state.files = action.payload;
+    selectFile: (state, action) => {
+      const fileFind = state.files.some(item => item.id === action.payload.id);
+
+      if (fileFind) {
+        state.files = state.files.filter(item => item.id !== action.payload.id);
+        return;
+      }
+
+      state.files.push({...action.payload, selected: true});
     },
 
     setOpenManPopup: (state, action) => {
@@ -19,5 +26,5 @@ export const manfiles = createSlice({
   },
 });
 
-export const { setFiles, openManPopup } = manfiles.actions;
+export const { selectFile, setOpenManPopup } = manfiles.actions;
 export default manfiles.reducer;
