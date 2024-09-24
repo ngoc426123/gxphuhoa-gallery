@@ -27,7 +27,6 @@ export default function UploadProgressPopup() {
   const handleClosePopup = () => {
     dispatch(setOpenProgressPopup(false));
   };
-  
 
   // CLASS
   const cls = {

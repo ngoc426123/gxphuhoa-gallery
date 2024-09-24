@@ -5,7 +5,7 @@ const initialState = {
   openProgressPopup: true,
 }
 
-export const uploadfile = createSlice({
+export const uploadfiles = createSlice({
   name: 'uploadfiles',
   initialState,
   reducers: {
@@ -19,5 +19,5 @@ export const uploadfile = createSlice({
   },
 });
 
-export const { setFiles, setOpenProgressPopup } = uploadfile.actions;
-export default uploadfile.reducer;
+export const { setFiles, setOpenProgressPopup } = uploadfiles.actions;
+export default uploadfiles.reducer;

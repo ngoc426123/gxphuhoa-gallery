@@ -14,7 +14,7 @@ export const Form = {
     // CLASS
     const cls = {
       formInput: clsx('mb-3', customClassGroup),
-      input: clsx('w-full h-12 px-4 text-base rounded outline-0', customClassInput),
+      input: clsx('w-full h-12 px-4 rounded outline-0', customClassInput),
     }
 
     // RENDER
