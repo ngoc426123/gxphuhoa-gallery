@@ -1,9 +1,16 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 // COMPONENTS
 import AlbumsItem from "../../components/AlbumsItem";
+import ContextMenu from "../../components/ContextMenu";
+
+// ICONS
+import { faEdit, faEye, faTrash } from "@fortawesome/free-solid-svg-icons";
 
 export default function Albums() {
+  // REF
+  const _albums = useRef();
+
   // STATE
   const [listAlbums] = useState([
     {
@@ -104,30 +111,62 @@ export default function Albums() {
       thumb: 'https://fastly.picsum.photos/id/181/1024/768.jpg?hmac=o2rIqbKjDJ--41SIschr9wTLCkLrtFkM7XEAN_ZiO-Q',
       link: '/album/6',
     },
+    {
+      id: 15,
+      title: 'The first line of Lorem Ipsum',
+      count: 48,
+      thumb: 'https://fastly.picsum.photos/id/81/1024/768.jpg?hmac=odWnMIj_zOgFtQ7nDn6WWLdohOCv9miIDdt6oSrB3h8',
+      link: '/album/6',
+    },
   ]);
+  const [contextMenu, setContextMenu] = useState({
+    open: false,
+    position: {},
+    menus: [
+      { text: 'Xem menu', icon: faEye, onClick: () => {} },
+      { text: 'Đổi tên', icon: faEdit, onClick: () => {} },
+      { text: 'Xoá album', icon: faTrash, onClick: () => {} },
+    ]
+  });
+
+  // METHOD
+  const handleGetContextMenuPos = (data) => {
+    setContextMenu(oldData => ({
+      ...oldData,
+      open: true,
+      position: data,
+    }))
+  };
+
+  const handleCloseContextMenu = () => {
+    setContextMenu(data => ({ ...data, open: false, }));
+  }
 
   // CLASS
   const cls = {
-    wrap: 'grid grid-cols-5 gap-6 w-full',
-    followMenu: 'w-24 h-32 bg-slate-200 rounded shadow-2xl shadow-slate-700/70 fixed opacity top-25 left-25'
+    wrap: 'grid grid-cols-5 gap-6 w-full relative',
   };
 
   // RENDER
   return (
-    <div className={cls.wrap} data-albums>
+    <div className={cls.wrap} ref={_albums} data-albums>
       {listAlbums && listAlbums.map((item, index) => (
         <AlbumsItem
           key={index}
+          id={item.id}
           title={item.title}
           count={item.count}
           thumb={item.thumb}
           link={item.link}
+          contextElement={_albums}
+          contextMenu={contextMenu.menus}
+          onGetContextMenuPos={handleGetContextMenuPos}
         />
       ))}
-      {/* FOLLOW MENU */}
-      <div className={cls.followMenu}>
-        lorem
-      </div>
+      <ContextMenu
+        { ...contextMenu }
+        onCloseMenu={handleCloseContextMenu}
+      />
     </div>
   )
 }
