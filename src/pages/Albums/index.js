@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 
 // COMPONENTS
 import AlbumsItem from "../../components/AlbumsItem";
@@ -119,28 +119,49 @@ export default function Albums() {
       link: '/album/6',
     },
   ]);
-  const [contextMenu, setContextMenu] = useState({
-    open: false,
-    position: {},
-    menus: [
-      { text: 'Xem menu', icon: faEye, onClick: () => {} },
-      { text: 'Đổi tên', icon: faEdit, onClick: () => {} },
-      { text: 'Xoá album', icon: faTrash, onClick: () => {} },
-    ]
-  });
+  const [currentAlbum, setCurrentAlbum] = useState(0); // STORE ALBUM ID
+  const [menuPosition, setMenuPosition] = useState({});
+  const [openMenu, setOpenMenu] = useState(false);
 
   // METHOD
   const handleGetContextMenuPos = (data) => {
-    setContextMenu(oldData => ({
-      ...oldData,
-      open: true,
-      position: data,
-    }))
+    setMenuPosition(oldData => ({...oldData, ...data}))
   };
 
-  const handleCloseContextMenu = () => {
-    setContextMenu(data => ({ ...data, open: false, }));
+  const handleSetCurrentAlbum = (id) => {
+    setCurrentAlbum(() => id);
+  };
+
+  const handleOpenContextMenu = () => {
+    setOpenMenu(true);
   }
+
+  const handleCloseContextMenu = () => {
+    setOpenMenu(false);
+  }
+
+  const handleViewAlbum = (id) => {
+    console.log(`View ${id}`);
+  }
+
+  const handleRenameAlbum = (id) => {
+    console.log(`Rename ${id}`);
+  }
+
+  const handleRemoveAlbum = (id) => {
+    console.log(`Remove ${id}`);
+  }
+
+  // CONTEXT MENU
+  const contextMenu = useMemo(() => ({
+    open: openMenu,
+    position: menuPosition,
+    menus: [
+      { text: 'Xem menu', icon: faEye, onClick: () => handleViewAlbum(currentAlbum) },
+      { text: 'Đổi tên', icon: faEdit, onClick: () => handleRenameAlbum(currentAlbum) },
+      { text: 'Xoá album', icon: faTrash, onClick: () => handleRemoveAlbum(currentAlbum) },
+    ]
+  }), [openMenu, currentAlbum, menuPosition]);
 
   // CLASS
   const cls = {
@@ -160,7 +181,9 @@ export default function Albums() {
           link={item.link}
           contextElement={_albums}
           contextMenu={contextMenu.menus}
+          onOpenMenu={handleOpenContextMenu}
           onGetContextMenuPos={handleGetContextMenuPos}
+          onGetCurrentAlbum={handleSetCurrentAlbum}
         />
       ))}
       <ContextMenu

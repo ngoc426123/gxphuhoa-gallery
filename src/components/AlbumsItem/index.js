@@ -6,7 +6,18 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default function AlbumsItem(props) {
   // PROPS
-  const { id, title, count, thumb, link, contextElement, contextMenu, onGetContextMenuPos } = props;
+  const {
+    id,
+    title,
+    count,
+    thumb,
+    link,
+    contextElement,
+    contextMenu,
+    onGetContextMenuPos,
+    onGetCurrentAlbum,
+    onOpenMenu,
+  } = props;
 
   // METHOD
   const getMenuDim = () => {
@@ -38,6 +49,8 @@ export default function AlbumsItem(props) {
       ...(onRight ? { right: (contextX + contextWidth) - (x + width) } : { left: x + scrollX - contextX }),
       ...(onBottom ? { bottom: (contextY + contextHeight) - (y + scrollY + height) } : { top: y + scrollY - contextY }),
     });
+    onGetCurrentAlbum(id);
+    onOpenMenu(true);
   }
 
   // CLASS

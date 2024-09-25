@@ -40,7 +40,14 @@ export default function ContextMenu(props) {
       <div className={cls.menu} style={{ ...position }} ref={_menu}>
         <ul>
           {menus && menus.map((item, index) => (
-            <button className={cls.menuItem} key={index}>
+            <button
+              className={cls.menuItem}
+              key={index}
+              onClick={() => {
+                item.onClick();
+                onCloseMenu();
+              }}
+            >
               <FontAwesomeIcon icon={item.icon} className={cls.menuIcon}/>
               <span>{item.text}</span>
             </button>
