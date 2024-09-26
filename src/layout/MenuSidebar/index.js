@@ -25,6 +25,11 @@ export default function MenuSidebar() {
         icon: faSolarPanel
       },
       {
+        menu: 'Hình ảnh',
+        link: '/images',
+        icon: faImages
+      },
+      {
         menu: 'Albums',
         link: '/albums',
         icon: faImages

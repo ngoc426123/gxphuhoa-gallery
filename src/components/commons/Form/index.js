@@ -30,10 +30,14 @@ export const Form = {
     const cls = {
       formInput: clsx(
         'mb-3',
+        'group-[.input-group]:w-full group-[.input-group]:mb-0',
         customClassGroup,
-        'group-[.input-group]:w-full group-[.input-group]:mb-0 group-[.input-group]:border-r-none'
       ),
-      input: clsx('w-full h-12 px-4 border border-slate-300/60 rounded outline-0', customClassInput),
+      input: clsx(
+        'w-full h-12 px-4 border border-slate-300/60 rounded outline-0',
+        ' group-[.input-group]:border-r-none',
+        customClassInput,
+      ),
     }
 
     // RENDER

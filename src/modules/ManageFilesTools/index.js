@@ -3,20 +3,41 @@ import { useDispatch, useSelector } from "react-redux";
 import { clearFiles } from "../../store/manfiles";
 
 // ICON
+import { useMemo, useState } from "react";
+import clsx from "clsx";
+import { Alert } from "../../components/Alert";
+
+// ICONS
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faTrash, faX } from "@fortawesome/free-solid-svg-icons"
-import { useMemo } from "react";
-import clsx from "clsx";
 
 export default function ManageFilesTools() {
   // STATE
   const dispatch = useDispatch();
   const { files } = useSelector(state => state.manfiles);
+  const [alert, setAlert] = useState({
+    open: false,
+    status: false,
+    title: '',
+    desc: '',
+  });
 
   // METHOD
   const handleClearFiles = () => {
     dispatch(clearFiles());
   };
+
+  const handleEventRemoveImage = () => {
+    if (!files.length) return;
+
+    setAlert(oldData => ({
+      ...oldData,
+      open: true,
+      status: 2,
+      title: `Xoá hình ảnh, số lượng ${files.length} tấm`,
+      desc: 'BẠn thật sự muốn xoá các hình này ra khỏi hệ thống, sẽ không thể khôi phục.',
+    }))
+  }
  
   // CLASS
   const cls = useMemo(() => ({
@@ -31,19 +52,37 @@ export default function ManageFilesTools() {
 
   // RENDER
   return (
-    <div className={cls.wrap} data-manage-file-tools>
-      <div className={cls.tools}>
-        <button
-          className={cls.close}
-          onClick={handleClearFiles}
-        >
-          <FontAwesomeIcon icon={faX}/>
-        </button>
-        <span>Đã chọn {files.length} ảnh</span>
+    <>
+      <div className={cls.wrap} data-manage-file-tools>
+        <div className={cls.tools}>
+          <button
+            className={cls.close}
+            onClick={handleClearFiles}
+          >
+            <FontAwesomeIcon icon={faX}/>
+          </button>
+          <span>Đã chọn {files.length} ảnh</span>
+        </div>
+        <div className={cls.tools}>
+          {/* REMOVE IMAGES */}
+          <button
+            className={cls.trash}
+            onClick={handleEventRemoveImage}
+          >
+            <FontAwesomeIcon icon={faTrash}/>
+          </button>
+        </div>
       </div>
-      <div className={cls.tools}>
-        <button className={cls.trash}><FontAwesomeIcon icon={faTrash}/></button>
-      </div>
-    </div>
+      <Alert
+        open={alert.open}
+        status={alert.status}
+        title={alert.title}
+        desc={alert.desc}
+        okCta="Đồng ý"
+        onClickOkCta={() => setAlert(data => ({ ...data, open: false }))}
+        cancelCta="Không"
+        onClickCancelCta={() => setAlert(data => ({ ...data, open: false }))}
+      />
+    </>
   )
 }

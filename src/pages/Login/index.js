@@ -53,7 +53,7 @@ export default function Login() {
     if (!username || !password) {
       setAlert({
         open: true,
-        status: false,
+        status: 0,
         title: 'Không thể đăng nhập',
         desc: 'Bạn nhập thiếu Username hoặc Password, vui lòng kiểm tra lại.',
       });
@@ -71,14 +71,14 @@ export default function Login() {
       setLocalstorage('Gxphuhoa-user', data.data);
       setAlert({
         open: true,
-        status: true,
+        status: 1,
         title: 'Đăng nhập thành công',
         desc: 'Chúc mừng bạn đã đăng nhập thành công, nhấn nút CHUYỂN phía dưới để vô trang quản lý.',
       });
     } catch(error) {
       setAlert({
         open: true,
-        status: false,
+        status: 0,
         ..._ERROR_DEFINE[error.response.data.code]
       });
     }

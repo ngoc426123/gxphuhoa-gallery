@@ -10,6 +10,7 @@ import BaseLayout from "../layout/BaseLayout";
 // PAGES
 import Login from "../pages/Login";
 import Dashbroad from "../pages/Dashbroad";
+import Images from "../pages/Images";
 import Albums from "../pages/Albums";
 import AlbumsDetail from "../pages/AlbumsDetail";
 import Config from "../pages/Config";
@@ -29,19 +30,28 @@ const router = createBrowserRouter([
             element: <Dashbroad />,
           },
           {
-            path: '/albums',
-            element: <Albums />,
+            path: 'images',
+            element: <Images />,
           },
           {
-            path: 'album/:albumId',
-            element: <AlbumsDetail/>
+            path: 'albums',
+            children: [
+              {
+                path: '',
+                element: <Albums />,
+              },
+              {
+                path: ':albumId',
+                element: <AlbumsDetail/>
+              },
+            ]
           },
           {
-            path: '/config',
+            path: 'config',
             element: <Config />,
           },
           {
-            path: '/upload-files',
+            path: 'upload-files',
             element: <UploadFiles />
           }
         ]
