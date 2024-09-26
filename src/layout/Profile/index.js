@@ -12,8 +12,9 @@ export default function Profile() {
   const cls = {
     wrap: 'flex items-start w-full pb-6 mb-6 border-b border-b-slate-600/70',
     avatar: 'size-10 mr-3 rounded-lg overflow-hidden',
+    welcome: 'text-xs leading-tight text-slate-100',
     name: 'text-slate-100',
-    email: 'text-sm text-slate-400 font-thin',
+    email: 'text-sm text-slate-300 font-thin',
   };
 
   // RENDER
@@ -23,7 +24,7 @@ export default function Profile() {
         <img src={Avatar_img} alt={user?.display_name || ''} />
       </div>
       <div>
-        <p className={cls.name}>Xin chào</p>
+        <p className={cls.welcome}>Xin chào</p>
         <p className={cls.name}><strong>{user?.display_name || ''}</strong></p>
         <p className={cls.email}>{user?.user_email || ''}</p>
       </div>
