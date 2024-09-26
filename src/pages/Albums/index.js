@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 // COMPONENTS
 import AlbumsItem from "../../components/AlbumsItem";
@@ -6,6 +6,10 @@ import ContextMenu from "../../components/ContextMenu";
 
 // ICONS
 import { faEdit, faEye, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { Modal } from "../../components/Modal";
+import { Form } from "../../components/commons/Form";
+import Cta from "../../components/commons/Cta";
+import { Alert } from "../../components/Alert";
 
 export default function Albums() {
   // REF
@@ -122,6 +126,19 @@ export default function Albums() {
   const [currentAlbum, setCurrentAlbum] = useState(0); // STORE ALBUM ID
   const [menuPosition, setMenuPosition] = useState({});
   const [openMenu, setOpenMenu] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
+  const [albumTitleModal, setAlbumTitleModal] = useState('');
+  const [alert, setAlert] = useState({
+    open: false,
+    status: false,
+    title: '',
+    desc: '',
+  });
+
+  // SIDE EFFECT
+  useEffect(() => {
+    document.title = 'Albums - Thư viện ảnh - Giáo Xứ Phú Hoà'; 
+  }, []);
 
   // METHOD
   const handleGetContextMenuPos = (data) => {
@@ -144,24 +161,46 @@ export default function Albums() {
     console.log(`View ${id}`);
   }
 
-  const handleRenameAlbum = (id) => {
-    console.log(`Rename ${id}`);
+  const handleOpenPopupRenameAlbum = () => {
+    setOpenModal(true);
   }
 
-  const handleRemoveAlbum = (id) => {
-    console.log(`Remove ${id}`);
+  const handleEventUpdateAlbumName = () => {
+    console.log(currentAlbum, albumTitleModal);
+    setOpenModal(false);
+    setAlbumTitleModal('')
   }
+
+  const handleEventKeyupUpdateAlbumName = (e) => {
+    const { key, shiftKey, altKey, ctrlKey } = e;
+
+    if (key === 'Enter') {
+      if (shiftKey || altKey || ctrlKey) return;
+
+      handleEventUpdateAlbumName();
+    }
+  }
+
+  const handleRemoveAlbum = useCallback(() => {
+    setAlert(data => ({
+      ...data,
+      open: true,
+      status: false,
+      title: 'Xoá Album',
+      desc: 'Bạn muốn xoá Album này chứ: ' + currentAlbum
+    }))
+  }, [currentAlbum]);
 
   // CONTEXT MENU
   const contextMenu = useMemo(() => ({
     open: openMenu,
     position: menuPosition,
     menus: [
-      { text: 'Xem menu', icon: faEye, onClick: () => handleViewAlbum(currentAlbum) },
-      { text: 'Đổi tên', icon: faEdit, onClick: () => handleRenameAlbum(currentAlbum) },
-      { text: 'Xoá album', icon: faTrash, onClick: () => handleRemoveAlbum(currentAlbum) },
+      { text: 'Xem menu', icon: faEye, onClick: () => handleViewAlbum() },
+      { text: 'Đổi tên', icon: faEdit, onClick: () => handleOpenPopupRenameAlbum() },
+      { text: 'Xoá album', icon: faTrash, onClick: () => handleRemoveAlbum() },
     ]
-  }), [openMenu, currentAlbum, menuPosition]);
+  }), [openMenu, menuPosition, handleRemoveAlbum]);
 
   // CLASS
   const cls = {
@@ -170,26 +209,58 @@ export default function Albums() {
 
   // RENDER
   return (
-    <div className={cls.wrap} ref={_albums} data-albums>
-      {listAlbums && listAlbums.map((item, index) => (
-        <AlbumsItem
-          key={index}
-          id={item.id}
-          title={item.title}
-          count={item.count}
-          thumb={item.thumb}
-          link={item.link}
-          contextElement={_albums}
-          contextMenu={contextMenu.menus}
-          onOpenMenu={handleOpenContextMenu}
-          onGetContextMenuPos={handleGetContextMenuPos}
-          onGetCurrentAlbum={handleSetCurrentAlbum}
+    <>
+      <div className={cls.wrap} ref={_albums} data-albums>
+        {listAlbums && listAlbums.map((item, index) => (
+          <AlbumsItem
+            key={index}
+            id={item.id}
+            title={item.title}
+            count={item.count}
+            thumb={item.thumb}
+            link={item.link}
+            contextElement={_albums}
+            contextMenu={contextMenu.menus}
+            onOpenMenu={handleOpenContextMenu}
+            onGetContextMenuPos={handleGetContextMenuPos}
+            onGetCurrentAlbum={handleSetCurrentAlbum}
+          />
+        ))}
+        <ContextMenu
+          { ...contextMenu }
+          onCloseMenu={handleCloseContextMenu}
         />
-      ))}
-      <ContextMenu
-        { ...contextMenu }
-        onCloseMenu={handleCloseContextMenu}
+      </div>
+      <Modal open={openModal}>
+        <form onSubmit={(e) => e.preventDefault()}>
+          <Form.Label text="Tên album"/>
+          <Form.InputGroup>
+            <Form.Input
+              id="albumTitleModal"
+              value={albumTitleModal}
+              placeholder="Nhập tên album..."
+              onChange={(e) => setAlbumTitleModal(e.target.value)}
+              onKeyUp={handleEventKeyupUpdateAlbumName}
+            />
+            <Cta
+              type="button"
+              onClick={() => handleEventUpdateAlbumName()}
+            >
+              OK
+            </Cta>
+          </Form.InputGroup>
+        </form>
+      </Modal>
+      <Alert
+        open={alert.open}
+        status={alert.status}
+        title={alert.title}
+        desc={alert.desc}
+        okCta="Đồng ý"
+        onClickOkCta={() => setAlert(data => ({ ...data, open: false }))}
+        cancelCta="Không"
+        onClickCancelCta={() => setAlert(data => ({ ...data, open: false }))}
       />
-    </div>
+    </>
   )
 }

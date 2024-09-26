@@ -33,7 +33,7 @@ export default function UploadButtonTopbar() {
   return (
     <Cta ctaStyle='outline' onClick={open}>
       <FontAwesomeIcon icon={faUpload} className="mr-2"/>
-      <span>Upload</span>
+      <span className="inline-block">Upload</span>
     </Cta>
   );
 }

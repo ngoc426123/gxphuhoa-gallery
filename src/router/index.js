@@ -11,6 +11,7 @@ import BaseLayout from "../layout/BaseLayout";
 import Login from "../pages/Login";
 import Dashbroad from "../pages/Dashbroad";
 import Albums from "../pages/Albums";
+import AlbumsDetail from "../pages/AlbumsDetail";
 import Config from "../pages/Config";
 import UploadFiles from "../pages/UploadFiles";
 
@@ -30,6 +31,10 @@ const router = createBrowserRouter([
           {
             path: '/albums',
             element: <Albums />,
+          },
+          {
+            path: 'album/:albumId',
+            element: <AlbumsDetail/>
           },
           {
             path: '/config',

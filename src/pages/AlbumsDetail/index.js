@@ -8,7 +8,7 @@ import ListImages from "../../components/ListImages";
 import { useDispatch, useSelector } from "react-redux";
 import { selectFile, clearFiles, setOpenManPopup } from "../../store/manfiles";
 
-export default function UploadFiles() {
+export default function AlbumsDetail() {
   const dispatch = useDispatch();
 
   // STATE
@@ -48,11 +48,11 @@ export default function UploadFiles() {
       return item;
     });
   }, [listImages, files])
-  const [albumTitle, setAlbumTitle] = useState('');
+  const [albumTitle, setAlbumTitle] = useState('Album phong cảnh nội bộ 2024');
 
   // METHOD
   const handleClickSelectImage = (imageItem) => {
-    dispatch(selectFile(imageItem));
+    dispatch(selectFile(imageItem))
   }
 
   // SIDE EFFECT
