@@ -1,3 +1,6 @@
+import { useState } from "react";
+import { Bar } from "react-chartjs-2";
+
 // IMAGES
 import { clsx } from "clsx";
 import Cover_img from "../../assets/images/dashboard-cover.svg";
@@ -7,14 +10,34 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendarDays, faHardDrive, faImages, faRss } from "@fortawesome/free-solid-svg-icons";
 
 export default function Dashbroad() {
+  // STATE
+  const [charData] = useState({
+    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dev'],
+    datasets: [
+      {
+        label: '# Hình mới',
+        data: [45, 26, 103, 55, 104, 204, 87, 99, 104, 135, 202, 302],
+        borderWidth: 1,
+        backgroundColor: '#0d9488',
+      },
+      {
+        label: '# Albums mới',
+        data: [2, 4, 1, 2, 2, 3, 1, 2, 1, 7, 2, 4],
+        borderWidth: 1,
+        backgroundColor: '#9333ea',
+        type: 'line',
+      },
+    ],
+  });
+
   // CLASS
   const cls = {
     wrap: 'w-full',
     rowDashboard: 'grid grid-cols-2 gap-5 mb-8',
     coverDashboard: 'rounded-lg overflow-hidden relative',
     coverDashboardInfo: 'text-right absolute top-8 right-8',
-    coverDashboardText1: 'block text-lg font-thin',
-    coverDashboardText2: 'block text-5xl font-bold',
+    coverDashboardText1: 'block text-lg text-sky-700 font-thin',
+    coverDashboardText2: 'block text-5xl text-sky-800 font-bold',
     groupBoxInfo: 'grid grid-cols-2 grid-rows-2 gap-5',
     boxInfo: 'w-full px-5 py-5 bg-black rounded-lg text-slate-100 overflow-hidden relative',
     boxInfoBefore: 'before before:w-[150%] before:h-[120%] before:bg-slate-900/20 before:absolute before:rotate-[-25deg] before:top-[3rem] before:left-[1rem] before:pointer-events-none',
@@ -68,7 +91,7 @@ export default function Dashbroad() {
       </div>
       <div className={cls.rowBlackboard}>
         <div className={cls.col1}>
-          hình ảnh mới
+          <Bar data={charData}/>
         </div>
         <div className={cls.col2}>
           hoạt động mới
