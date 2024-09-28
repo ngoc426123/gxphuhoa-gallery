@@ -8,6 +8,9 @@ import {
   BarElement,
   PointElement,
   LineElement,
+  Colors,
+  Legend,
+  Title,
 } from 'chart.js';
 
 // REDUX
@@ -24,6 +27,9 @@ ChartJS.register(
   BarElement,
   PointElement,
   LineElement,
+  Colors,
+  Legend,
+  Title,
 );
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

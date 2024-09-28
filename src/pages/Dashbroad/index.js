@@ -11,24 +11,84 @@ import { faCalendarDays, faHardDrive, faImages, faRss } from "@fortawesome/free-
 
 export default function Dashbroad() {
   // STATE
-  const [charData] = useState({
-    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dev'],
-    datasets: [
-      {
-        label: '# Hình mới',
-        data: [45, 26, 103, 55, 104, 204, 87, 99, 104, 135, 202, 302],
-        borderWidth: 1,
-        backgroundColor: '#0d9488',
+  const [inYearData] = useState({
+    data: {
+      labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dev'],
+      datasets: [
+        {
+          label: 'Hình ảnh',
+          data: [45, 26, 103, 55, 104, 204, 87, 99, 104, 135, 202, 302],
+          borderWidth: 1,
+          yAxisID: 'y',
+          order: 1,
+        },
+        {
+          label: 'Albums',
+          data: [2, 5, 1, 2, 2, 3, 1, 2, 1, 7, 2, 4],
+          borderWidth: 2,
+          type: 'line',
+          yAxisID: 'y1',
+          order: 0,
+        },
+      ],
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        y: {
+          position: 'left',
+        },
+        y1: {
+          position: 'right',
+        },
+      }
+    },
+    plugins: {
+      colors: {
+        enabled: false
       },
-      {
-        label: '# Albums mới',
-        data: [2, 4, 1, 2, 2, 3, 1, 2, 1, 7, 2, 4],
-        borderWidth: 1,
-        backgroundColor: '#9333ea',
-        type: 'line',
-      },
-    ],
+    }
   });
+  const [yearsData] = useState({
+    data: {
+      labels: ['2022', '2023', '2024', '2020', '2018', '2019'],
+      datasets: [
+        {
+          label: 'Hình ảnh',
+          data: [2468, 1892, 1567, 1502, 1190, 892],
+          borderWidth: 1,
+          backgroundColor: '#4bc0c0',
+        },
+      ],
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      maintainAspectRatio: false,
+    },
+    plugins: {
+      title: {
+        display: true,
+        text: 'Số lượng trong năm 2024'
+      },
+      colors: {
+        enabled: false
+      },
+    }
+  });
+  const [activities] = useState([
+    { avatar: 'https://fastly.picsum.photos/id/700/100/100.jpg?hmac=piWdXztkLPFsF6n2D-c8d-_Xj4LDXaZ4xJgGXpVQ9gg', name: 'Thức Đỗ', email: 'thucdo123@gmail.com', time: '12:30 08/03/1024' },
+    { avatar: 'https://fastly.picsum.photos/id/700/100/100.jpg?hmac=piWdXztkLPFsF6n2D-c8d-_Xj4LDXaZ4xJgGXpVQ9gg', name: 'Thức Đỗ', email: 'thucdo123@gmail.com', time: '12:30 08/03/1024' },
+    { avatar: 'https://fastly.picsum.photos/id/468/100/100.jpg?hmac=9PvsPN0iS2LwjNELceXwL6QqGZ_k_5REaTKA87h8Xok', name: 'Minh Ngọc', email: 'minhngoc.ith@gmail.com', time: '10:30 08/03/1024' },
+    { avatar: 'https://fastly.picsum.photos/id/76/100/100.jpg?hmac=ml0woYXAgAWkn_dBMBSpXJI7hNZtd8VPsad15xxn_co', name: 'Chung Nguyễn', email: 'chungnguyen.abc@gmail.com', time: '12:30 06/03/1024' },
+    { avatar: 'https://fastly.picsum.photos/id/76/100/100.jpg?hmac=ml0woYXAgAWkn_dBMBSpXJI7hNZtd8VPsad15xxn_co', name: 'Long Đỗ', email: 'dolong123@gmail.com', time: '12:30 06/03/1024' },
+    { avatar: 'https://fastly.picsum.photos/id/76/100/100.jpg?hmac=ml0woYXAgAWkn_dBMBSpXJI7hNZtd8VPsad15xxn_co', name: 'Chung Nguyễn', email: 'chungnguyen.abc@gmail.com', time: '12:30 06/03/1024' },
+    { avatar: 'https://fastly.picsum.photos/id/76/100/100.jpg?hmac=ml0woYXAgAWkn_dBMBSpXJI7hNZtd8VPsad15xxn_co', name: 'Chung Nguyễn', email: 'chungnguyen.abc@gmail.com', time: '12:30 06/03/1024' },
+    { avatar: 'https://fastly.picsum.photos/id/76/100/100.jpg?hmac=ml0woYXAgAWkn_dBMBSpXJI7hNZtd8VPsad15xxn_co', name: 'Long Đỗ', email: 'dolong123@gmail.com', time: '12:30 06/03/1024' },
+    { avatar: 'https://fastly.picsum.photos/id/76/100/100.jpg?hmac=ml0woYXAgAWkn_dBMBSpXJI7hNZtd8VPsad15xxn_co', name: 'Chung Nguyễn', email: 'chungnguyen.abc@gmail.com', time: '12:30 06/03/1024' },
+    { avatar: 'https://fastly.picsum.photos/id/700/100/100.jpg?hmac=piWdXztkLPFsF6n2D-c8d-_Xj4LDXaZ4xJgGXpVQ9gg', name: 'Thức Đỗ', email: 'thucdo123@gmail.com', time: '12:30 08/03/1024' },
+  ])
 
   // CLASS
   const cls = {
@@ -49,9 +109,24 @@ export default function Dashbroad() {
     boxInfoSubText: 'block text-md font-thin relative',
     boxInfoHightText: 'block text-2xl font-bold relative',
     boxInfoLowText: 'block text-sm font-thin text-slate-100/60 relative',
-    rowBlackboard: 'grid grid-cols-4 gap-5',
-    col1: 'col-span-3',
+    rowBlackboard: 'grid grid-cols-4 grid-rows-1 gap-5',
+    col1: 'col-span-2',
     col2: 'col-span-1',
+    chart: 'bg-white rounded-lg',
+    box: 'h-full mb-8 bg-white rounded-lg overflow-hidden',
+    boxTitle: 'px-3 py-3 text-white font-semi-bold',
+    boxTitleInYear: 'bg-sky-600',
+    boxTitleYears: 'bg-teal-600',
+    boxTitleActivities: 'bg-rose-600',
+    boxContent: 'h-full p-5',
+    boxChart: 'h-80',
+    activitiesBox: 'max-h-80 pr-2 overflow-hidden overflow-y-auto custom-scroll',
+    activitiesItem: 'flex items-center mb-3',
+    activitiesAvatar: 'size-10 mr-3 rounded-lg shrink-0 overflow-hidden',
+    activitiesInfo: 'w-[calc(100%-(2.5rem+6rem+(0.75rem*2)))]',
+    activitiesName: 'text-sm font whitespace-nowrap overflow-hidden text-ellipsis',
+    activitiesEmail: 'text-sm font-light whitespace-nowrap overflow-hidden text-ellipsis',
+    activitiesTime: 'w-24 ml-3 text-xs shrink-0',
   }
 
   // RENDER
@@ -91,10 +166,45 @@ export default function Dashbroad() {
       </div>
       <div className={cls.rowBlackboard}>
         <div className={cls.col1}>
-          <Bar data={charData}/>
+          <div className={cls.box}>
+            <div className={clsx(cls.boxTitle, cls.boxTitleInYear)}>Trong năm 2024</div>
+            <div className={cls.boxContent}>
+              <div className={cls.boxChart}>
+                <Bar { ...inYearData } className={cls.chart}/>
+              </div>             
+            </div>
+          </div>
         </div>
         <div className={cls.col2}>
-          hoạt động mới
+          <div className={cls.box}>
+            <div className={clsx(cls.boxTitle, cls.boxTitleYears)}>Các năm gần đây</div>
+            <div className={cls.boxContent}>
+              <div className={cls.boxChart}>
+                <Bar { ...yearsData } className={cls.chart}/>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className={cls.col2}>
+          <div className={cls.box}>
+            <div className={clsx(cls.boxTitle, cls.boxTitleActivities)}>Hoạt động mới nhất</div>
+            <div className={cls.boxContent}>
+              <div className={cls.activitiesBox}>
+                {activities && activities.map((item, index) => (
+                  <div className={cls.activitiesItem} key={index}>
+                    <div className={cls.activitiesAvatar}>
+                      <img src={item.avatar} alt=""/>
+                    </div>
+                    <div className={cls.activitiesInfo}>
+                      <p className={cls.activitiesName}>{item.name}</p>
+                      <p className={cls.activitiesEmail}>{item.email}</p>
+                    </div>
+                    <div className={cls.activitiesTime}>{item.time}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

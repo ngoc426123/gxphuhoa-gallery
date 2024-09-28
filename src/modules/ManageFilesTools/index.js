@@ -35,7 +35,7 @@ export default function ManageFilesTools() {
       open: true,
       status: 2,
       title: `Xoá hình ảnh, số lượng ${files.length} tấm`,
-      desc: 'BẠn thật sự muốn xoá các hình này ra khỏi hệ thống, sẽ không thể khôi phục.',
+      desc: 'Bạn thật sự muốn xoá các hình này ra khỏi hệ thống, sẽ không thể khôi phục.',
     }))
   }
  
