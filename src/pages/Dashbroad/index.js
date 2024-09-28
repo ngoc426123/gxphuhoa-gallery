@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Bar } from "react-chartjs-2";
 
 // IMAGES
@@ -8,6 +8,7 @@ import Cover_img from "../../assets/images/dashboard-cover.svg";
 // ICONS
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendarDays, faHardDrive, faImages, faRss } from "@fortawesome/free-solid-svg-icons";
+import Box from "../../components/Box";
 
 export default function Dashbroad() {
   // STATE
@@ -88,12 +89,17 @@ export default function Dashbroad() {
     { avatar: 'https://fastly.picsum.photos/id/76/100/100.jpg?hmac=ml0woYXAgAWkn_dBMBSpXJI7hNZtd8VPsad15xxn_co', name: 'Long Đỗ', email: 'dolong123@gmail.com', time: '12:30 06/03/1024' },
     { avatar: 'https://fastly.picsum.photos/id/76/100/100.jpg?hmac=ml0woYXAgAWkn_dBMBSpXJI7hNZtd8VPsad15xxn_co', name: 'Chung Nguyễn', email: 'chungnguyen.abc@gmail.com', time: '12:30 06/03/1024' },
     { avatar: 'https://fastly.picsum.photos/id/700/100/100.jpg?hmac=piWdXztkLPFsF6n2D-c8d-_Xj4LDXaZ4xJgGXpVQ9gg', name: 'Thức Đỗ', email: 'thucdo123@gmail.com', time: '12:30 08/03/1024' },
-  ])
+  ]);
+
+  // SIDE EFFECT
+  useEffect(() => {
+    document.title = 'Bảng quản lý - Thư viện ảnh - Giáo Xứ Phú Hoà';
+  }, []);
 
   // CLASS
   const cls = {
     wrap: 'w-full',
-    rowDashboard: 'grid grid-cols-2 gap-5 mb-8',
+    rowDashboard: 'grid grid-cols-2 gap-5 mb-5',
     coverDashboard: 'rounded-lg overflow-hidden relative',
     coverDashboardInfo: 'text-right absolute top-8 right-8',
     coverDashboardText1: 'block text-lg text-sky-700 font-thin',
@@ -112,13 +118,6 @@ export default function Dashbroad() {
     rowBlackboard: 'grid grid-cols-4 grid-rows-1 gap-5',
     col1: 'col-span-2',
     col2: 'col-span-1',
-    chart: 'bg-white rounded-lg',
-    box: 'h-full mb-8 bg-white rounded-lg overflow-hidden',
-    boxTitle: 'px-3 py-3 text-white font-semi-bold',
-    boxTitleInYear: 'bg-sky-600',
-    boxTitleYears: 'bg-teal-600',
-    boxTitleActivities: 'bg-rose-600',
-    boxContent: 'h-full p-5',
     boxChart: 'h-80',
     activitiesBox: 'max-h-80 pr-2 overflow-hidden overflow-y-auto custom-scroll',
     activitiesItem: 'flex items-center mb-3',
@@ -131,9 +130,9 @@ export default function Dashbroad() {
 
   // RENDER
   return (
-    <div className={cls.wrap}>
+    <div className={cls.wrap} data-dashboard>
       <div className={cls.rowDashboard}>
-        <div className={cls.coverDashboard}>
+        <div className={cls.coverDashboard} data-dashboard-cover>
           <img src={Cover_img} alt=""/>
           <div className={cls.coverDashboardInfo}>
             <span className={cls.coverDashboardText1}>Hình ảnh</span>
@@ -141,22 +140,22 @@ export default function Dashbroad() {
           </div>
         </div>
         <div className={cls.groupBoxInfo}>
-          <div className={clsx(cls.boxInfo, cls.boxInfoBefore, cls.boxAlbums)}>
+          <div className={clsx(cls.boxInfo, cls.boxInfoBefore, cls.boxAlbums)} data-dashboard-info>
             <span className={cls.boxInfoSubText}>Albums</span>
             <span className={cls.boxInfoHightText}>273</span>
             <FontAwesomeIcon icon={faImages} className={cls.boxInfoIcon}/>
           </div>
-          <div className={clsx(cls.boxInfo, cls.boxInfoBefore, cls.boxStore)}>
+          <div className={clsx(cls.boxInfo, cls.boxInfoBefore, cls.boxStore)} data-dashboard-info>
             <span className={cls.boxInfoSubText}>Lưu trữ</span>
             <span className={cls.boxInfoHightText}>1Gb</span>
             <FontAwesomeIcon icon={faHardDrive} className={cls.boxInfoIcon}/>
           </div>
-          <div className={clsx(cls.boxInfo, cls.boxInfoBefore, cls.boxTime)}>
+          <div className={clsx(cls.boxInfo, cls.boxInfoBefore, cls.boxTime)} data-dashboard-info>
             <span className={cls.boxInfoSubText}>6 năm và 57 tháng</span>
             <span className={cls.boxInfoHightText}>2019 - 2024</span>
             <FontAwesomeIcon icon={faCalendarDays} className={cls.boxInfoIcon}/>
           </div>
-          <div className={clsx(cls.boxInfo, cls.boxInfoBefore, cls.boxNew)}>
+          <div className={clsx(cls.boxInfo, cls.boxInfoBefore, cls.boxNew)} data-dashboard-info>
             <span className={cls.boxInfoSubText}>142 Hình mới</span>
             <span className={cls.boxInfoHightText}>2 Albums mới</span>
             <span className={cls.boxInfoLowText}>(tính trong tháng)</span>
@@ -166,45 +165,36 @@ export default function Dashbroad() {
       </div>
       <div className={cls.rowBlackboard}>
         <div className={cls.col1}>
-          <div className={cls.box}>
-            <div className={clsx(cls.boxTitle, cls.boxTitleInYear)}>Trong năm 2024</div>
-            <div className={cls.boxContent}>
-              <div className={cls.boxChart}>
-                <Bar { ...inYearData } className={cls.chart}/>
-              </div>             
+          <Box title="Trong năm 2024" boxStyle="sky">
+            <div className={cls.boxChart}>
+              <Bar { ...inYearData }/>
             </div>
-          </div>
+          </Box>
         </div>
         <div className={cls.col2}>
-          <div className={cls.box}>
-            <div className={clsx(cls.boxTitle, cls.boxTitleYears)}>Các năm gần đây</div>
-            <div className={cls.boxContent}>
-              <div className={cls.boxChart}>
-                <Bar { ...yearsData } className={cls.chart}/>
-              </div>
+          <Box title="Các năm gần đây" boxStyle="teal">
+            <div className={cls.boxChart}>
+              <Bar { ...yearsData } className={cls.chart}/>
             </div>
-          </div>
+          </Box>
         </div>
         <div className={cls.col2}>
-          <div className={cls.box}>
-            <div className={clsx(cls.boxTitle, cls.boxTitleActivities)}>Hoạt động mới nhất</div>
-            <div className={cls.boxContent}>
-              <div className={cls.activitiesBox}>
-                {activities && activities.map((item, index) => (
-                  <div className={cls.activitiesItem} key={index}>
-                    <div className={cls.activitiesAvatar}>
-                      <img src={item.avatar} alt=""/>
-                    </div>
-                    <div className={cls.activitiesInfo}>
-                      <p className={cls.activitiesName}>{item.name}</p>
-                      <p className={cls.activitiesEmail}>{item.email}</p>
-                    </div>
-                    <div className={cls.activitiesTime}>{item.time}</div>
+          <Box title="Hoạt động mới nhất" boxStyle="rose">
+            <div className={cls.activitiesBox}>
+              {activities && activities.map((item, index) => (
+                <div className={cls.activitiesItem} key={index}>
+                  <div className={cls.activitiesAvatar}>
+                    <img src={item.avatar} alt=""/>
                   </div>
-                ))}
-              </div>
+                  <div className={cls.activitiesInfo}>
+                    <p className={cls.activitiesName}>{item.name}</p>
+                    <p className={cls.activitiesEmail}>{item.email}</p>
+                  </div>
+                  <div className={cls.activitiesTime}>{item.time}</div>
+                </div>
+              ))}
             </div>
-          </div>
+          </Box>
         </div>
       </div>
     </div>

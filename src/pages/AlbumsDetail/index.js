@@ -70,7 +70,7 @@ export default function AlbumsDetail() {
   // CLASS
   const cls = {
     inputTitle: 'w-full mb-10',
-    customClassInput: 'text-2xl px-0 border-0 border-b border-slate-400 bg-transparent rounded-none',
+    customClassInput: 'text-2xl !px-0 border-0 border-b border-slate-400 bg-transparent rounded-none',
     listImages: 'w-full',
   };
 

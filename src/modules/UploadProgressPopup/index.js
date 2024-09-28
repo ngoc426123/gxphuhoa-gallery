@@ -48,7 +48,7 @@ export default function UploadProgressPopup() {
   return {
     false: <></>,
     true: (
-      <div className={cls.popup}>
+      <div className={cls.popup} data-upload-progress-popup>
         <div className={cls.head} onClick={handleToggle}>
           <p>
             <FontAwesomeIcon icon={hideProgress ? faAngleUp : faAngleDown} className={cls.iconToggle}/>

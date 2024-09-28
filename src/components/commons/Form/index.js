@@ -9,16 +9,20 @@ import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 export const Form = {
   Label(props) {
     // PROPS
-    const { text } = props;
+    const { text, subText, customClass } = props;
 
     // CLASS
     const cls = {
-      label: 'inline-block mb-3 font-semibold'
+      label: clsx('inline-block mb-2 font-semibold', customClass),
+      subText: 'block text-xs text-slate-400 font-light'
     }
 
     // RENDER
     return (
-      <label className={cls.label}>{text}</label>
+      <label className={cls.label}>
+        {text}
+        <span className={cls.subText}>{subText}</span>
+      </label>
     );
   },
 
