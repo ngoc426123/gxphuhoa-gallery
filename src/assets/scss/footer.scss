@@ -1,0 +1,24 @@
+.footer {
+  color: $gray;
+  background-color: $black;
+  text-align: center;
+
+  &__title1 {
+    h1 {
+      font-size: 20px;
+      line-height: 28px;
+      text-transform: uppercase;
+    }
+  }
+
+  &__title2 {
+    font-size: 30px;
+    line-height: 38px;
+    font-weight: 500;
+    margin-bottom: 10px;
+  }
+
+  &__desc {
+    margin-bottom: 10px;
+  }
+}

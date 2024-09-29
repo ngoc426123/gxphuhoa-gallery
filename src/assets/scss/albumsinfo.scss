@@ -1,0 +1,53 @@
+.albums-info {
+  position: relative;
+  margin-bottom: 35px;
+  padding-bottom: 15px;
+
+  &::before {
+    content: "";
+    width: 150px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    border-bottom: solid 1px $gray1;
+  }
+
+  &__name {
+    font-size: 24px;
+    line-height: 32px;
+    font-weight: 600;
+    margin-bottom: 5px;
+  }
+
+  &__attr {
+    font-size: 16px;
+    line-height: 24px;
+    color: $gray;
+
+    ul {
+      display: flex;
+      align-items: center;
+    }
+
+    li {
+      margin-left: 15px;
+      position: relative;
+
+      &::before {
+        content: "-";
+        position: absolute;
+        top: 50%;
+        left: -10px;
+        transform: translateY(-50%);
+      }
+
+      &:first-child {
+        margin-left: 0;
+
+        &::before {
+          display: none;
+        }
+      }
+    }
+  }
+}

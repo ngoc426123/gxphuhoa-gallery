@@ -1,0 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700&display=swap');
+@import './reset';
+@import './color';
+@import './icon';
+@import './config';
+@import './mixin';
+
+
+@import './header.scss';
+@import './footer.scss';
+@import './lightbox.scss';
+@import './listalbums.scss';
+@import './albumsinfo.scss';
+@import './listimages.scss';
+@import './loading.scss';
