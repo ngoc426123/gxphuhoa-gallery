@@ -1,6 +1,7 @@
 {
   "name": "gxphuhoa-gallery-bo",
   "version": "0.1.0",
+  "homepage": ".",
   "private": true,
   "dependencies": {
     "@azure/msal-browser": "^3.24.0",

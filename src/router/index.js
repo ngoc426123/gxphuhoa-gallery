@@ -1,4 +1,3 @@
-import { createBrowserRouter } from "react-router-dom";
 import { loginLoader, rootLoader } from "./loader";
 
 // APP
@@ -16,7 +15,7 @@ import AlbumsDetail from "../pages/AlbumsDetail";
 import Config from "../pages/Config";
 import UploadFiles from "../pages/UploadFiles";
 
-const router = createBrowserRouter([
+export const defineRouter = [
   {
     path: '/',
     element: <App />,
@@ -63,6 +62,4 @@ const router = createBrowserRouter([
       }
     ]
   }
-]);
-
-export default router;
+];
