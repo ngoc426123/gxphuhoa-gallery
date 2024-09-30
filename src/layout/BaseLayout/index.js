@@ -2,8 +2,7 @@ import { Outlet } from "react-router-dom";
 import Sidebar from "../Sidebar";
 
 // COMPONENT
-import UploadButtonTopbar from "../../modules/UploadButtonTopbar";
-import UploadProgressPopup from "../../modules/UploadProgressPopup";
+import UploadHandle from "../../modules/UploadHandle";
 import ManageFilesTools from "../../modules/ManageFilesTools";
 
 export default function BaseLayout() {
@@ -23,14 +22,13 @@ export default function BaseLayout() {
         <ManageFilesTools />
         <div className={cls.sideContent} data-side-content>
           <div className={cls.topBar} data-top-bar>
-            <UploadButtonTopbar />
+          <UploadHandle />
           </div>
           <div className={cls.mainContent} data-main-content>
             <Outlet />
           </div>
         </div>
       </div>
-      <UploadProgressPopup />
     </>
   )
 }

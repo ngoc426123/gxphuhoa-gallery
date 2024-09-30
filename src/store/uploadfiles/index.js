@@ -2,7 +2,6 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   files: [],
-  openProgressPopup: true,
 }
 
 export const uploadfiles = createSlice({
@@ -12,12 +11,8 @@ export const uploadfiles = createSlice({
     setFiles: (state, action) => {
       state.files = action.payload;
     },
-
-    setOpenProgressPopup: (state, action) => {
-      state.openProgressPopup = action.payload
-    }
   },
 });
 
-export const { setFiles, setOpenProgressPopup } = uploadfiles.actions;
+export const { setFiles } = uploadfiles.actions;
 export default uploadfiles.reducer;

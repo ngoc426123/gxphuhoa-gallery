@@ -1,41 +1,54 @@
 import { useMemo, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useDropzone } from "react-dropzone";
+import clsx from "clsx";
 
-// REDUX
-import { useDispatch, useSelector } from "react-redux";
+// COMPONENT
+import Cta from "../../components/commons/Cta";
 
 // ICON
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAngleDown, faAngleUp, faCircleCheck, faClose, faImage } from "@fortawesome/free-solid-svg-icons";
-import { setOpenProgressPopup } from "../../store/uploadfiles";
-import clsx from "clsx";
+import { faUpload, faAngleDown, faAngleUp, faCircleCheck, faClose, faImage } from "@fortawesome/free-solid-svg-icons";
 
-export default function UploadProgressPopup() {
+export default function UploadHandle() {
   // REF
   const _progressListRef = useRef();
 
+  // DROPZONE
+  const { open } = useDropzone({
+    onDrop: (files) => handleEventOnDrop(files),
+  });
+
   // STATE
-  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [files, setFiles] = useState([]);
+  const [openPopup, setOpenPopup] = useState(false);
   const [hideProgress, setHideProgress] = useState(false);
-  const { openProgressPopup, files } = useSelector(state => state.uploadfiles);
   const filesCount = useMemo(() => files.length, [files]);
 
   // METHOD
+  const handleEventOnDrop = (files) => {
+    setFiles(files);
+    setOpenPopup(true);
+    navigate('/upload-files');
+  };
+
   const handleToggle = () => {
     setHideProgress(value => !value);
   };
 
   const handleClosePopup = () => {
-    dispatch(setOpenProgressPopup(false));
+    setOpenPopup(false);
   };
 
   // CLASS
   const cls = {
-    popup: 'w-80 bg-white fixed right-3 bottom-0 rounded-md rounded-bl-none rounded-br-none shadow-2xl shadow-slate-400/70 overflow-hidden transition-all',
+    popup: 'w-80 bg-white rounded-md rounded-bl-none rounded-br-none shadow-2xl shadow-slate-400/70 overflow-hidden fixed right-3 bottom-0 z-30 transition-all',
     head: 'px-4 py-3 bg-slate-200 relative cursor-pointer',
     iconToggle: 'mr-2',
     close: 'size-6 absolute top-1/2 right-3 translate-y-[-50%] transition-all hover:text-blue-600',
     progress: clsx(
-      'w-full max-h-60 overflow-hidden overflow-y-auto',
+      'w-full max-h-60 overflow-hidden overflow-y-auto custom-scroll',
       { 'hidden': hideProgress }
     ),
     itemUpload: 'p-3 pr-14 list-none overflow-hidden text-ellipsis whitespace-nowrap relative hover:bg-slate-200',
@@ -45,10 +58,13 @@ export default function UploadProgressPopup() {
   };
 
   // RENDER
-  return {
-    false: <></>,
-    true: (
-      <div className={cls.popup} data-upload-progress-popup>
+  return (
+    <>
+      <Cta ctaStyle='outline' onClick={open}>
+        <FontAwesomeIcon icon={faUpload} className="mr-2"/>
+        <span className="inline-block">Upload</span>
+      </Cta>
+      {openPopup && <div className={cls.popup} data-upload-progress-popup>
         <div className={cls.head} onClick={handleToggle}>
           <p>
             <FontAwesomeIcon icon={hideProgress ? faAngleUp : faAngleDown} className={cls.iconToggle}/>
@@ -67,7 +83,7 @@ export default function UploadProgressPopup() {
             </li>
           ))}
         </div>
-      </div>
-    )
-  }[openProgressPopup]
+      </div>}
+    </>
+  );
 }
