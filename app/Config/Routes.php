@@ -69,3 +69,8 @@ $routes->get('/albums/(:num)', 'Albums::Detail/$1');
 /*********************/
 /****** DIRECTORY ****/
 $routes->get('/directory/count', 'Directory::count');
+
+/*********************/
+/****** OPTIONS ******/
+$routes->get('/options', 'Options::Index');
+$routes->post('/options', 'Options::Index');
