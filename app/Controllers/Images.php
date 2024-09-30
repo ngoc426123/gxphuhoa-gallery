@@ -17,7 +17,7 @@ class Images extends ResourceController {
 			"count" => $imagesCount["id"],
 		];
 
-		return $this->respond($dataRespond, ResponseInterface::HTTP_ACCEPTED);
+		return $this->respond($dataRespond, ResponseInterface::HTTP_OK);
 	}
 
 	public function CountInTime() {

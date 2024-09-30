@@ -21,7 +21,7 @@ class Options extends ResourceController {
 					->selectCount("id")
 					->where("key", $key)
 					->first();
-					
+
 				if ($optionsData["id"] > 0) {
 					$optionsModel
 						->set("value", $value)

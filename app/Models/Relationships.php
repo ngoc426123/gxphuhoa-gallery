@@ -4,15 +4,15 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class Images extends Model
+class Relationships extends Model
 {
-    protected $table            = 'images';
+    protected $table            = 'relationships';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ["id", "name", "thumb", "date", "size", "type", "location"];
+    protected $allowedFields    = [];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
