@@ -7,7 +7,7 @@ use CodeIgniter\RESTful\ResourceController;
 use CodeIgniter\HTTP\ResponseInterface;
 
 class Images extends ResourceController {
-	public function count() {
+	public function Count() {
 		$imagesModel = new ModelsImages();
 		$imagesCount = $imagesModel
 			->selectCount('id')
@@ -20,7 +20,7 @@ class Images extends ResourceController {
 		return $this->respond($dataRespond, ResponseInterface::HTTP_ACCEPTED);
 	}
 
-	public function countInTime() {
+	public function CountInTime() {
 		$params = $this->request->getPostGet();
 
 		if (!isset($params["month"]) || !isset($params["year"])) {
@@ -46,7 +46,7 @@ class Images extends ResourceController {
 		return $this->respond($dataRespond, ResponseInterface::HTTP_OK);
 	}
 
-	public function countInYear() {
+	public function CountInYear() {
 		$params = $this->request->getPostGet();
 
 		if (!isset($params["year"])) {
@@ -77,7 +77,7 @@ class Images extends ResourceController {
 		return $this->respond($dataRespond, ResponseInterface::HTTP_NOT_FOUND);
 	}
 
-	public function countRecent() {
+	public function CountRecent() {
 		$params = $this->request->getPostGet();
 
 		if (!isset($params["numberyearrecent"])) {
@@ -106,7 +106,7 @@ class Images extends ResourceController {
 		return $this->respond($dataRespond, ResponseInterface::HTTP_OK);
 	}
 
-	public function capacity() {
+	public function Capacity() {
 		helper('number');
 		$imagesModel = new ModelsImages();
 		$capacityCount = $imagesModel
@@ -115,6 +115,40 @@ class Images extends ResourceController {
 
 		$dataRespond = [
 			"capacity" => number_to_size($capacityCount["size"]),
+		];
+
+		return $this->respond($dataRespond, ResponseInterface::HTTP_OK);
+	}
+
+	public function List() {
+		$params = $this->request->getPostGet();
+
+		if (!isset($params["start"]) || !isset($params["perpage"])) {
+			$dataRespond = [
+				"error" => "Thiếu 1 trong 2 trường start hoặc perpage",
+			];
+
+			return $this->respond($dataRespond, ResponseInterface::HTTP_NOT_FOUND);
+		}
+
+		$start = (int)$params["start"];
+		$perpage = (int)$params["perpage"];
+		$imagesModel = new ModelsImages();
+		$imagesCounter = $imagesModel
+			->selectCount("id")
+			->first();
+		$imagesData = $imagesModel
+			->select("id, name, thumb, date, size")
+			->orderBy("id", "DESC")
+			->limit($perpage, $start)
+			->findAll();
+
+		$imagesTotal = $imagesCounter["id"];
+
+		$dataRespond = [
+			"data" => $imagesData,
+			"count" => count($imagesData),
+			"more" => $start + $perpage < $imagesTotal,
 		];
 
 		return $this->respond($dataRespond, ResponseInterface::HTTP_OK);

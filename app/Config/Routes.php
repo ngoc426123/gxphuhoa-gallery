@@ -25,35 +25,47 @@ $routes->post('/activities/create', 'Activities::create');
 $routes->get('/images/count', 'Images::count');
 $routes->get('/images/countintime', 'Images::countInTime');
 /**
- * PARAM IN URL
+ * PARAMS IN URL
  * ?month=<>&year=<>
  */
 $routes->get('/images/countinyear', 'Images::countInYear');
 /**
- * PARAM IN URL
+ * PARAMS IN URL
  * ?year=<>
  */
 $routes->get('/images/capacity', 'Images::capacity');
 $routes->get('/images/countrecent', 'Images::countRecent');
 /**
- * PARAM IN URL
+ * PARAMS IN URL
  * ?numberyearrecent=<>
  */
-
+$routes->get('/images/list', 'Images::List');
+/**
+ * PARAMS IN URL
+ * ?start=<>&perpage=<>
+ */
 /*********************/
 /****** ALBUMS *******/
 $routes->get('/albums/count', 'Albums::count');
 $routes->get('/albums/countintime', 'Albums::countInTime');
 /**
- * PARAM IN URL
+ * PARAMS IN URL
  * ?month=<>&year=<>
  */
 $routes->get('/albums/countinyear', 'Albums::countInYear');
 /**
- * PARAM IN URL
+ * PARAMS IN URL
  * ?year=<>
  */
-
+$routes->get('/albums/list', 'Albums::List');
+/**
+ * PARAMS IN URL
+ * ?start=<>&perpage=<>
+ */
+$routes->get('/albums/(:num)', 'Albums::Detail/$1');
+/**
+ * NO PARAMS
+ */
 /*********************/
 /****** DIRECTORY ****/
 $routes->get('/directory/count', 'Directory::count');

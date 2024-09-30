@@ -6,7 +6,7 @@ use CodeIgniter\RESTful\ResourceController;
 use CodeIgniter\HTTP\ResponseInterface;
 
 class Directory extends ResourceController {
-	public function count() {
+	public function Count() {
 		helper('filesystem');
 		$yearMap = directory_map('../upload/');
 		$dataRespond = [

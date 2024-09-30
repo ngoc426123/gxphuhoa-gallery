@@ -13,7 +13,7 @@ class Activities extends ResourceController {
 	 *
 	 * @return ResponseInterface
 	 */
-	public function index() {
+	public function Index() {
 		$ActivitiesModel = new ModelsActivities();
 		$activitiesData = $ActivitiesModel
 			->orderBy('id', 'DESC')
@@ -28,7 +28,7 @@ class Activities extends ResourceController {
 	 *
 	 * @return ResponseInterface
 	 */
-	public function create() {
+	public function Create() {
 		$ActivitiesModel = new ModelsActivities();
 		$body = $this->request->getBody();
 		$param = json_decode($body);
