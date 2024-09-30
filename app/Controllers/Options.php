@@ -8,13 +8,39 @@ use CodeIgniter\HTTP\ResponseInterface;
 
 class Options extends ResourceController {
 	public function index() {
+		$optionsModel = new ModelOptions();
 		$method = $this->request->getMethod();
 
 		if ($method == "POST") {
-			return $this->respond(["method" => $method], ResponseInterface::HTTP_OK);
+			$data = [];
+			$body = $this->request->getBody();
+			$param = json_decode($body, true);
+
+			foreach ($param as $key => $value) {
+				$optionsData = $optionsModel
+					->selectCount("id")
+					->where("key", $key)
+					->first();
+					
+				if ($optionsData["id"] > 0) {
+					$optionsModel
+						->set("value", $value)
+						->where("key", $key)
+						->update();
+				} else {
+					echo $key;
+					$optionsModel
+						->set([
+							"id" => "",
+							"key" => $key,
+							"value" => $value,
+							"note" => "",
+						])
+						->insert();
+				}
+			}
 		}
 
-		$optionsModel = new ModelOptions();
 		$options = [];
 		$optionsData = $optionsModel
 			->findAll();

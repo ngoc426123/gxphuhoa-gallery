@@ -44,6 +44,7 @@ $routes->get('/images/list', 'Images::List');
  * PARAMS IN URL
  * ?start=<>&perpage=<>
  */
+
 /*********************/
 /****** ALBUMS *******/
 $routes->get('/albums/count', 'Albums::count');
@@ -66,6 +67,7 @@ $routes->get('/albums/(:num)', 'Albums::Detail/$1');
 /**
  * NO PARAMS
  */
+
 /*********************/
 /****** DIRECTORY ****/
 $routes->get('/directory/count', 'Directory::count');
@@ -73,4 +75,13 @@ $routes->get('/directory/count', 'Directory::count');
 /*********************/
 /****** OPTIONS ******/
 $routes->get('/options', 'Options::Index');
+/**
+ * NO PARAMS
+ */
 $routes->post('/options', 'Options::Index');
+/**
+ * BODY JSON DATA
+ * {
+ *    [options key]: [options value],
+ * }
+ */
