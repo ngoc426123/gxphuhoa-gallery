@@ -1,6 +1,7 @@
-import { useMemo, useRef, useState } from "react";
+import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDropzone } from "react-dropzone";
+import axios from "axios";
 import clsx from "clsx";
 
 // COMPONENT
@@ -11,25 +12,26 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUpload, faAngleDown, faAngleUp, faCircleCheck, faClose, faImage } from "@fortawesome/free-solid-svg-icons";
 
 export default function UploadHandle() {
-  // REF
-  const _progressListRef = useRef();
-
   // DROPZONE
   const { open } = useDropzone({
-    onDrop: (files) => handleEventOnDrop(files),
+    onDrop: (fls) => handleEventOnDrop(fls),
   });
 
   // STATE
   const navigate = useNavigate();
-  const [files, setFiles] = useState([]);
+  const [filesUp, setFilesUp] = useState([]);
+  const [per] = useState(2);
+  const [start] = useState(0);
+  const [end] = useState(per + start);
   const [openPopup, setOpenPopup] = useState(false);
   const [hideProgress, setHideProgress] = useState(false);
-  const filesCount = useMemo(() => files.length, [files]);
+  const filesCount = useMemo(() => filesUp.length, [filesUp]);
 
   // METHOD
   const handleEventOnDrop = (files) => {
-    setFiles(files);
+    setFilesUp(() => files);
     setOpenPopup(true);
+    handleUpload(files);
     navigate('/upload-files');
   };
 
@@ -39,6 +41,31 @@ export default function UploadHandle() {
 
   const handleClosePopup = () => {
     setOpenPopup(false);
+  };
+
+  const handleUpload = async (files) => {
+    if (!files.length) return;
+
+    const fileUpload = files.filter((item, index) => start <= index && index < end);
+    const data = new FormData();
+    
+    setFilesUp(() => files);
+    
+    [...fileUpload].forEach((file, index) => {
+      data.append(index, file, file.name);
+    });
+
+    try {
+      const apiUrl = process.env.REACT_APP_API + '/upload';
+      const resonse = await axios.post(apiUrl, data);
+      const leftFiles = files.filter(item => !fileUpload.includes(item));
+
+      console.log(resonse);
+      setFilesUp(() => leftFiles);
+      handleUpload(leftFiles);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   // CLASS
@@ -68,14 +95,14 @@ export default function UploadHandle() {
         <div className={cls.head} onClick={handleToggle}>
           <p>
             <FontAwesomeIcon icon={hideProgress ? faAngleUp : faAngleDown} className={cls.iconToggle}/>
-            Có {filesCount}/100 đang được upload...
+            Có -/{filesCount} đang được upload...
           </p>
           <button className={cls.close} onClick={handleClosePopup}>
             <FontAwesomeIcon icon={faClose}/>
           </button>
         </div>
-        <div className={cls.progress} ref={_progressListRef}>
-          {files && files.map((file) => (
+        <div className={cls.progress}>
+          {filesUp && filesUp.map((file) => (
             <li key={file.name} className={cls.itemUpload}>
               <FontAwesomeIcon icon={faImage} className={cls.iconItemUpload}/>
               <span className={cls.span}>{file.name}</span>
