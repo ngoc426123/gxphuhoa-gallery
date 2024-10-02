@@ -138,7 +138,7 @@ class Images extends ResourceController {
 			->selectCount("id")
 			->first();
 		$imagesData = $imagesModel
-			->select("id, name, thumb, date, size")
+			->select("id, name, thumb, date, size, location")
 			->orderBy("id", "DESC")
 			->limit($perpage, $start)
 			->findAll();
