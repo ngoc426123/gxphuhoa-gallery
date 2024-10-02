@@ -4,12 +4,16 @@ import { useDropzone } from "react-dropzone";
 import axios from "axios";
 import clsx from "clsx";
 
+// REDUX
+import { useDispatch, useSelector } from "react-redux";
+import { setFilesUploaded } from "../../store/uploadfiles";
+
 // COMPONENT
 import Cta from "../../components/commons/Cta";
 
 // ICON
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUpload, faAngleDown, faAngleUp, faCircleCheck, faClose, faImage } from "@fortawesome/free-solid-svg-icons";
+import { faUpload, faAngleDown, faAngleUp, faClose, faImage, faSpinner } from "@fortawesome/free-solid-svg-icons";
 
 export default function UploadHandle() {
   // DROPZONE
@@ -18,9 +22,11 @@ export default function UploadHandle() {
   });
 
   // STATE
+  const { config } = useSelector(state => state.root);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [filesUp, setFilesUp] = useState([]);
-  const [per] = useState(2);
+  const [per] = useState(3); // THIS STATE WILL BE DEFINE HOW MANY IMAGE CAN BE UPLOAD IN ONE TIMES
   const [start] = useState(0);
   const [end] = useState(per + start);
   const [openPopup, setOpenPopup] = useState(false);
@@ -46,6 +52,7 @@ export default function UploadHandle() {
   const handleUpload = async (files) => {
     if (!files.length) return;
 
+    const { atd_width, atd_height } = config;
     const fileUpload = files.filter((item, index) => start <= index && index < end);
     const data = new FormData();
     
@@ -54,13 +61,20 @@ export default function UploadHandle() {
     [...fileUpload].forEach((file, index) => {
       data.append(index, file, file.name);
     });
+    data.append('dim_data', JSON.stringify({ atd_width, atd_height }))
 
     try {
+      const uploadOptions = {
+        headers: {'Content-Type': 'multipart/form-data'},
+        maxBodyLength: Infinity,
+        maxContentLength: Infinity,
+        emulateJSON: true
+      };
       const apiUrl = process.env.REACT_APP_API + '/upload';
-      const resonse = await axios.post(apiUrl, data);
+      const response = await axios.post(apiUrl, data, uploadOptions);
       const leftFiles = files.filter(item => !fileUpload.includes(item));
 
-      console.log(resonse);
+      dispatch(setFilesUploaded(response.data));
       setFilesUp(() => leftFiles);
       handleUpload(leftFiles);
     } catch (error) {
@@ -80,7 +94,7 @@ export default function UploadHandle() {
     ),
     itemUpload: 'p-3 pr-14 list-none overflow-hidden text-ellipsis whitespace-nowrap relative hover:bg-slate-200',
     iconItemUpload: 'size-4 mr-3',
-    iconItemUploadStatus: 'size-6 text-green-600 absolute top-1/2 right-3 translate-y-[-50%]',
+    iconItemUploadStatus: 'size-6 text-slate-300 absolute top-4 right-3 fa-spin',
     span: 'pointer-events-none',
   };
 
@@ -95,7 +109,7 @@ export default function UploadHandle() {
         <div className={cls.head} onClick={handleToggle}>
           <p>
             <FontAwesomeIcon icon={hideProgress ? faAngleUp : faAngleDown} className={cls.iconToggle}/>
-            Có -/{filesCount} đang được upload...
+            Có {filesCount} đang được upload...
           </p>
           <button className={cls.close} onClick={handleClosePopup}>
             <FontAwesomeIcon icon={faClose}/>
@@ -106,7 +120,7 @@ export default function UploadHandle() {
             <li key={file.name} className={cls.itemUpload}>
               <FontAwesomeIcon icon={faImage} className={cls.iconItemUpload}/>
               <span className={cls.span}>{file.name}</span>
-              <FontAwesomeIcon icon={faCircleCheck} className={cls.iconItemUploadStatus}/>
+              <FontAwesomeIcon icon={faSpinner} className={cls.iconItemUploadStatus}/>
             </li>
           ))}
         </div>

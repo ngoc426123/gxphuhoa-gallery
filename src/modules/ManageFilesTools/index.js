@@ -14,7 +14,7 @@ import { faTrash, faX } from "@fortawesome/free-solid-svg-icons"
 export default function ManageFilesTools() {
   // STATE
   const dispatch = useDispatch();
-  const { files } = useSelector(state => state.manfiles);
+  const { filesSelected } = useSelector(state => state.manfiles);
   const [alert, setAlert] = useState({
     open: false,
     status: false,
@@ -28,13 +28,13 @@ export default function ManageFilesTools() {
   };
 
   const handleEventRemoveImage = () => {
-    if (!files.length) return;
+    if (!filesSelected.length) return;
 
     setAlert(oldData => ({
       ...oldData,
       open: true,
       status: 2,
-      title: `Xoá hình ảnh, số lượng ${files.length} tấm`,
+      title: `Xoá hình ảnh, số lượng ${filesSelected.length} tấm`,
       desc: 'Bạn thật sự muốn xoá các hình này ra khỏi hệ thống, sẽ không thể khôi phục.',
     }))
   }
@@ -43,12 +43,12 @@ export default function ManageFilesTools() {
   const cls = useMemo(() => ({
     wrap: clsx(
       'flex items-center justify-between py-3 px-5 pl-8 bg-white shadow-2xl shadow-slate-400/70 fixed top-0 right-0 left-72 z-30 transition-all',
-      { 'translate-y-[-100%]': !files.length }
+      { 'translate-y-[-100%]': !filesSelected.length }
     ),
     tools: 'flex items-center',
     close: 'size-10 mr-2 rounded-full transition-all hover:bg-slate-100',
     trash: 'size-10 rounded-full transition-all hover:bg-slate-100'
-  }), [files]);
+  }), [filesSelected]);
 
   // RENDER
   return (
@@ -61,7 +61,7 @@ export default function ManageFilesTools() {
           >
             <FontAwesomeIcon icon={faX}/>
           </button>
-          <span>Đã chọn {files.length} ảnh</span>
+          <span>Đã chọn {filesSelected.length} ảnh</span>
         </div>
         <div className={cls.tools}>
           {/* REMOVE IMAGES */}

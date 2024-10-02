@@ -1,18 +1,18 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  files: [],
+  filesUploaded: [],
 }
 
 export const uploadfiles = createSlice({
   name: 'uploadfiles',
   initialState,
   reducers: {
-    setFiles: (state, action) => {
-      state.files = action.payload;
+    setFilesUploaded: (state, action) => {
+      state.filesUploaded = [...state.filesUploaded, ...action.payload];
     },
   },
 });
 
-export const { setFiles } = uploadfiles.actions;
+export const { setFilesUploaded } = uploadfiles.actions;
 export default uploadfiles.reducer;

@@ -28,7 +28,7 @@ export default function ListImages(props) {
           data-image={item.id}
         >
           <img
-            src={item.src}
+            src={`http://localhost/gxphuhoa-gallery-BE/upload/${item.location}/${item.thumb}`}
             className={clsx(cls.image, item.selected ? cls.imageItemSelected : '')}
             alt=""
           />

@@ -22,7 +22,7 @@ export const defineRouter = [
     children: [
       {
         element: <BaseLayout />,
-        loader: rootLoader,
+        // loader: rootLoader,
         children: [
           {
             path: '',

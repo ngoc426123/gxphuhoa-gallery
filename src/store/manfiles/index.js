@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  files: [],
+  filesSelected: [],
   openManPopup: true,
 }
 
@@ -10,18 +10,18 @@ export const manfiles = createSlice({
   initialState,
   reducers: {
     selectFile: (state, action) => {
-      const fileFind = state.files.some(item => item.id === action.payload.id);
+      const fileFind = state.filesSelected.some(item => item.id === action.payload.id);
 
       if (fileFind) {
-        state.files = state.files.filter(item => item.id !== action.payload.id);
+        state.filesSelected = state.filesSelected.filter(item => item.id !== action.payload.id);
         return;
       }
 
-      state.files.push({...action.payload, selected: true});
+      state.filesSelected.push({...action.payload, selected: true});
     },
 
     clearFiles: (state) => {
-      state.files = [];
+      state.filesSelected = [];
     },
 
     setOpenManPopup: (state, action) => {
