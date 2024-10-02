@@ -13,7 +13,7 @@ export default function ListImages(props) {
     imageItem: 'group bg-black cursor-pointer relative before before:h-12 before:bg-gradient-to-t before:from-transparent before:to-black/70 before:absolute before:top-0 before:right-0 before:left-0 before:transition-all before:opacity-0 hover:before:opacity-100',
     image: 'aspect-[4/3] object-cover transition-all',
     imageItemSelected: 'scale-90',
-    icon: 'size-5 text-white absolute top-1 right-1 transition-all opacity-0 group-hover:opacity-100',
+    icon: 'size-5 text-white absolute top-1 right-1 transition-all opacity-0 z-10 group-hover:opacity-100',
     iconSelected: 'opacity-100',
   }
 

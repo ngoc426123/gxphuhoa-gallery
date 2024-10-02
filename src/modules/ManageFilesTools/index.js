@@ -15,7 +15,7 @@ export default function ManageFilesTools() {
   // STATE
   const dispatch = useDispatch();
   const { filesSelected } = useSelector(state => state.manfiles);
-  const [alert, setAlert] = useState({
+  const [alertRemoveImage, setAlertRemoveImage] = useState({
     open: false,
     status: false,
     title: '',
@@ -27,16 +27,38 @@ export default function ManageFilesTools() {
     dispatch(clearFiles());
   };
 
-  const handleEventRemoveImage = () => {
+  const handleEventOpenConfirmRemoveImage = () => {
     if (!filesSelected.length) return;
 
-    setAlert(oldData => ({
+    setAlertRemoveImage(oldData => ({
       ...oldData,
       open: true,
       status: 2,
       title: `Xoá hình ảnh, số lượng ${filesSelected.length} tấm`,
       desc: 'Bạn thật sự muốn xoá các hình này ra khỏi hệ thống, sẽ không thể khôi phục.',
     }))
+  }
+
+  const handleEventCloseConfirmRemoveImage = () => {
+    setAlertRemoveImage(oldData => ({
+      ...oldData,
+      open: false,
+      status: 0,
+      title: null,
+      desc: null,
+    }));
+  }
+
+  const handleEventRemoveImage = () => {
+    setAlertRemoveImage(oldData => ({
+      ...oldData,
+      open: false,
+      status: 0,
+      title: null,
+      desc: null,
+    }));
+
+    console.log(filesSelected);
   }
  
   // CLASS
@@ -67,21 +89,22 @@ export default function ManageFilesTools() {
           {/* REMOVE IMAGES */}
           <button
             className={cls.trash}
-            onClick={handleEventRemoveImage}
+            onClick={handleEventOpenConfirmRemoveImage}
           >
             <FontAwesomeIcon icon={faTrash}/>
           </button>
         </div>
       </div>
+      {/* REMOVE ALERT */}
       <Alert
-        open={alert.open}
-        status={alert.status}
-        title={alert.title}
-        desc={alert.desc}
+        open={alertRemoveImage.open}
+        status={alertRemoveImage.status}
+        title={alertRemoveImage.title}
+        desc={alertRemoveImage.desc}
         okCta="Đồng ý"
-        onClickOkCta={() => setAlert(data => ({ ...data, open: false }))}
+        onClickOkCta={handleEventRemoveImage}
         cancelCta="Không"
-        onClickCancelCta={() => setAlert(data => ({ ...data, open: false }))}
+        onClickCancelCta={handleEventCloseConfirmRemoveImage}
       />
     </>
   )
