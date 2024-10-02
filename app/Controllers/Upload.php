@@ -8,6 +8,7 @@ use CodeIgniter\HTTP\ResponseInterface;
 
 class Upload extends ResourceController {
 	public function index(){
+		$image = service("image", "gd");
 		$imagesModel = new ModelImages();
 
 		// UPLOAD DIR
@@ -27,6 +28,10 @@ class Upload extends ResourceController {
 
 		// FILES
 		$files = $this->request->getFiles();
+
+		// THUMBNAIL DIMEMSION
+		$dim = $this->request->getPost()["dim_data"];
+		$dim = json_decode($dim);
 
 		foreach ($files as $img) {
 			// UPLOAD FILE
@@ -49,6 +54,12 @@ class Upload extends ResourceController {
 			];
 			$imagesModel->insert($dataInsert);
 			$imageID = $imagesModel->insertID();
+
+			// CREATE THUMB
+			$image
+				->withFile($filePath . $fileName.".".$fileExtension)
+				->fit($dim->atd_width, $dim->atd_height)
+				->save($filePath . $fileName."_thumb".".".$fileExtension);
 
 			// RESPOND DATA
 			$dataRespond[] = [
