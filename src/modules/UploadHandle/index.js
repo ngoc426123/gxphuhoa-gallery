@@ -6,7 +6,7 @@ import clsx from "clsx";
 
 // REDUX
 import { useDispatch, useSelector } from "react-redux";
-import { setFilesUploaded } from "../../store/uploadfiles";
+import { pushFilesUploaded } from "../../store/uploadfiles";
 
 // COMPONENT
 import Cta from "../../components/commons/Cta";
@@ -74,7 +74,7 @@ export default function UploadHandle() {
       const response = await axios.post(apiUrl, data, uploadOptions);
       const leftFiles = files.filter(item => !fileUpload.includes(item));
 
-      dispatch(setFilesUploaded(response.data));
+      dispatch(pushFilesUploaded(response.data));
       setFilesUp(() => leftFiles);
       handleUpload(leftFiles);
     } catch (error) {

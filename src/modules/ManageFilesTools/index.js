@@ -1,11 +1,13 @@
+import { useMemo, useState } from "react";
+import clsx from "clsx";
+import axios from "axios";
+import { Alert } from "../../components/Alert";
+
 // REDUX
 import { useDispatch, useSelector } from "react-redux";
 import { clearFiles } from "../../store/manfiles";
-
-// ICON
-import { useMemo, useState } from "react";
-import clsx from "clsx";
-import { Alert } from "../../components/Alert";
+import { setListImages } from "../../store/images";
+import { setFilesUploaded } from "../../store/uploadfiles";
 
 // ICONS
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
@@ -14,7 +16,9 @@ import { faTrash, faX } from "@fortawesome/free-solid-svg-icons"
 export default function ManageFilesTools() {
   // STATE
   const dispatch = useDispatch();
+  const { filesUploaded } = useSelector(state => state.uploadfiles);
   const { filesSelected } = useSelector(state => state.manfiles);
+  const { listImages } = useSelector(state => state.images);
   const [alertRemoveImage, setAlertRemoveImage] = useState({
     open: false,
     status: false,
@@ -49,7 +53,7 @@ export default function ManageFilesTools() {
     }));
   }
 
-  const handleEventRemoveImage = () => {
+  const handleEventRemoveImage = async () => {
     setAlertRemoveImage(oldData => ({
       ...oldData,
       open: false,
@@ -58,7 +62,19 @@ export default function ManageFilesTools() {
       desc: null,
     }));
 
-    console.log(filesSelected);
+    try {
+      const params = JSON.stringify(filesSelected);
+      const urlAPI = process.env.REACT_APP_API + '/images/remove';
+      const { data: { success } } = await axios.delete(urlAPI, { data: params });
+      const listImagesFilter = listImages.filter(item => !success.some(it => it.id === item.id));
+      const listUploadedFilter = filesUploaded.filter(item => !success.some(it => it.id === item.id));
+
+      dispatch(clearFiles());
+      dispatch(setListImages(listImagesFilter));
+      dispatch(setFilesUploaded(listUploadedFilter));
+    } catch (error) {
+      console.error(error);
+    }
   }
  
   // CLASS
