@@ -1,30 +1,31 @@
 import { useEffect, useMemo } from "react";
 
 // COMPONENT
+import { Form } from "../../components/commons/Form";
 import ListImages from "../../components/ListImages";
 
 // REDUX
 import { useDispatch, useSelector } from "react-redux";
-import { selectFile, clearFiles, setOpenManPopup } from "../../store/manfiles";
-import { setFilesUploaded } from "../../store/uploadfiles";
+import { selectFile, setOpenManPopup } from "../../store/manfiles";
+import { setTitleAddAlbum } from "../../store/albums";
 
-export default function UploadFiles() {
+export default function AlbumsCreate() {
   const dispatch = useDispatch();
 
   // STATE
-  const { filesUploaded } = useSelector(state => state.uploadfiles);
+  const { titleAddAlbum, listImagesAddAlbums } = useSelector(state => state.albums);
   const { filesSelected } = useSelector(state => state.manfiles);
   const listImagesFill = useMemo(() => {
-    if (!filesUploaded) return [];
+    if (!listImagesAddAlbums) return [];
 
-    if (!filesSelected) return filesUploaded;
+    if (!filesSelected) return listImagesAddAlbums;
 
-    return filesUploaded.map(item => {
+    return listImagesAddAlbums.map(item => {
       const isChecked = filesSelected.some(it => it.id === item.id);
       
       return { ...item, selected: isChecked };
     });
-  }, [filesUploaded, filesSelected])
+  }, [listImagesAddAlbums, filesSelected])
 
   // METHOD
   const handleClickSelectImage = (imageItem) => {
@@ -33,14 +34,12 @@ export default function UploadFiles() {
 
   // SIDE EFFECT
   useEffect(() => {
-    document.title = 'Hình Upload -  Thư viện ảnh - Giáo Xứ Phú Hoà';
-  
+    document.title = `${titleAddAlbum !== '' ? titleAddAlbum + ' -' : ''} Thư viện ảnh - Giáo Xứ Phú Hoà`;
+
     return () => {
-      dispatch(clearFiles());
-      dispatch(setFilesUploaded([]));
       dispatch(setOpenManPopup(false));
     }
-  }, [dispatch]);
+  }, [titleAddAlbum, dispatch]);
 
   // CLASS
   const cls = {
@@ -52,6 +51,15 @@ export default function UploadFiles() {
   // RENDER
   return (
     <div className="" data-upload-files>
+      <div className={cls.inputTitle} data-input-title>
+        <Form.Input
+          name="albumTitle"
+          value={titleAddAlbum}
+          placeholder="Tên album..."
+          onChange={e => dispatch(setTitleAddAlbum(e.target.value))}
+          customClassInput={cls.customClassInput}
+        />
+      </div>
       <div className={cls.listImages}>
         <ListImages
           list={listImagesFill}

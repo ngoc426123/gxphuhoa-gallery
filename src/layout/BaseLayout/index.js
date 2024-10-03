@@ -10,8 +10,8 @@ export default function BaseLayout() {
   const cls = {
     layout: 'h-full relative',
     sideContent: 'w-full min-h-full pl-72 overflow-hidden overflow-y-auto',
-    topBar: 'flex justify-end py-3 px-5 pl-8',
-    mainContent: 'py-3 px-5 pl-8',
+    topBar: 'flex justify-end py-3 px-8',
+    mainContent: 'py-3 px-8',
   }
 
   // RENDER

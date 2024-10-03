@@ -12,6 +12,7 @@ import Dashbroad from "../pages/Dashbroad";
 import Images from "../pages/Images";
 import Albums from "../pages/Albums";
 import AlbumsDetail from "../pages/AlbumsDetail";
+import AlbumsCreate from "../pages/AlbumsCreate";
 import Config from "../pages/Config";
 import UploadFiles from "../pages/UploadFiles";
 
@@ -43,6 +44,10 @@ export const defineRouter = [
                 path: ':albumId',
                 element: <AlbumsDetail/>
               },
+              {
+                path: 'create',
+                element: <AlbumsCreate />
+              }
             ]
           },
           {
