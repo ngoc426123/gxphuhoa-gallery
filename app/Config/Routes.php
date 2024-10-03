@@ -60,7 +60,14 @@ $routes->group('', ['filter' => 'cors'], static function($routes) {
    * PARAMS IN URL
    * ?start=<>&perpage=<>
    */
-  
+  $routes->delete('/images/remove', 'Images::Remove');
+  /**
+   * BODY JSON DATA
+   * [
+   *  { object images }
+   * ]
+   */
+
   /*********************/
   /****** ALBUMS *******/
   $routes->get('/albums/count', 'Albums::count');

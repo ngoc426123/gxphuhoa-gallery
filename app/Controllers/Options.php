@@ -49,8 +49,8 @@ class Options extends ResourceController {
 			$options[$value["key"]] = $value["value"];
 		}
 
-		$dataRespond = $options;
+		$respondData = $options;
 
-		return $this->respond($dataRespond, ResponseInterface::HTTP_OK);
+		return $this->respond($respondData, ResponseInterface::HTTP_OK);
 	}
 }

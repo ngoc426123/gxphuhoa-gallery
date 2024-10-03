@@ -9,7 +9,7 @@ class Directory extends ResourceController {
 	public function Count() {
 		helper('filesystem');
 		$yearMap = directory_map('../upload/');
-		$dataRespond = [
+		$respondData = [
 			"yearStart" => null,
 			"yearEnd" => null,
 			"years" => null,
@@ -17,7 +17,7 @@ class Directory extends ResourceController {
 		];
 
 		if (!count($yearMap)) {
-			$dataRespond = [
+			$respondData = [
 				"yearStart" => 0,
 				"yearEnd" => 0,
 				"years" => 0,
@@ -34,7 +34,7 @@ class Directory extends ResourceController {
 				$monthCounter += count($monthMap);
 			}
 
-			$dataRespond = [
+			$respondData = [
 				"yearStart" => +substr($yearStart, 0, 4),
 				"yearEnd" => +substr($yearEnd, 0, 4),
 				"years" => $yearCounter,
@@ -42,6 +42,6 @@ class Directory extends ResourceController {
 			];
 		}
 		
-		return $this->respond($dataRespond, ResponseInterface::HTTP_OK);
+		return $this->respond($respondData, ResponseInterface::HTTP_OK);
 	}
 }

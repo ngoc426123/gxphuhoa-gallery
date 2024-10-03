@@ -90,5 +90,5 @@ class Autoload extends AutoloadConfig
      *
      * @var list<string>
      */
-    public $helpers = ['utils', 'time', 'number'];
+    public $helpers = ['utils', 'time', 'number', 'images'];
 }

@@ -14,22 +14,22 @@ class Albums extends ResourceController {
 			->selectCount('id')
 			->first();
 
-		$dataRespond = [
+		$respondData = [
 			"count" => $albumsCount["id"],
 		];
 
-		return $this->respond($dataRespond, ResponseInterface::HTTP_OK);
+		return $this->respond($respondData, ResponseInterface::HTTP_OK);
 	}
 
 	public function CountInTime() {
 		$params = $this->request->getPostGet();
 
 		if (!isset($params["month"]) || !isset($params["year"])) {
-			$dataRespond = [
+			$respondData = [
 				"error" => "Thiếu 1 trong 2 trường tháng và năm.",
 			];
 
-			return $this->respond($dataRespond, ResponseInterface::HTTP_NOT_FOUND);
+			return $this->respond($respondData, ResponseInterface::HTTP_NOT_FOUND);
 		}
 
 		$month = $params["month"];
@@ -42,20 +42,20 @@ class Albums extends ResourceController {
 				"SUBSTRING(date, 7, 4)" => $year,
 			])
 			->first();
-		$dataRespond = [ "count" => $albumsCount["id"] ];
+		$respondData = [ "count" => $albumsCount["id"] ];
 
-		return $this->respond($dataRespond, ResponseInterface::HTTP_OK);
+		return $this->respond($respondData, ResponseInterface::HTTP_OK);
 	}
 
 	public function CountInYear() {
 		$params = $this->request->getPostGet();
 
 		if (!isset($params["year"])) {
-			$dataRespond = [
+			$respondData = [
 				"error" => "Thiếu trường năm.",
 			];
 
-			return $this->respond($dataRespond, ResponseInterface::HTTP_NOT_FOUND);
+			return $this->respond($respondData, ResponseInterface::HTTP_NOT_FOUND);
 		}
 
 		$year = $params["year"];
@@ -73,20 +73,20 @@ class Albums extends ResourceController {
 			$result[] = $albumCount["id"];
 		}
 
-		$dataRespond = ["count" => $result];
+		$respondData = ["count" => $result];
 
-		return $this->respond($dataRespond, ResponseInterface::HTTP_NOT_FOUND);
+		return $this->respond($respondData, ResponseInterface::HTTP_NOT_FOUND);
 	}
 
 	public function List() {
 		$params = $this->request->getPostGet();
 
 		if (!isset($params["start"]) || !isset($params["perpage"])) {
-			$dataRespond = [
+			$respondData = [
 				"error" => "Thiếu 1 trong 2 trường start hoặc perpage",
 			];
 
-			return $this->respond($dataRespond, ResponseInterface::HTTP_NOT_FOUND);
+			return $this->respond($respondData, ResponseInterface::HTTP_NOT_FOUND);
 		}
 
 		$start = (int)$params["start"];
@@ -115,13 +115,13 @@ class Albums extends ResourceController {
 			$albumsData[$key]["thumbnail"] = $albumsThumb;
 		}
 
-		$dataRespond = [
+		$respondData = [
 			"data" => $albumsData,
 			"count" => count($albumsData),
 			"more" => $start + $perpage < $albumsTotal,
 		];
 
-		return $this->respond($dataRespond, ResponseInterface::HTTP_OK);
+		return $this->respond($respondData, ResponseInterface::HTTP_OK);
 	}
 
 	public function Detail($id) {
@@ -140,11 +140,11 @@ class Albums extends ResourceController {
 			->orderBy("images.id", "ASC")
 			->findAll();
 		
-		$dataRespond = [
+		$respondData = [
 			"detail" => $albumsData,
 			"images" => $imagesData
 		];
 
-		return $this->respond($dataRespond, ResponseInterface::HTTP_OK);
+		return $this->respond($respondData, ResponseInterface::HTTP_OK);
 	}
 }

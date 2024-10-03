@@ -11,9 +11,6 @@ class Upload extends ResourceController {
 		$image = service("image", "gd");
 		$imagesModel = new ModelImages();
 
-		// UPLOAD DIR
-		$uploadDir = "upload";
-
 		// DATE
 		$now    = getdate();
 		$second = $now["seconds"];
@@ -24,7 +21,7 @@ class Upload extends ResourceController {
 		$year   = $now["year"];
 
 		// DATA RESPONSE
-		$dataRespond = [];
+		$respondData = [];
 
 		// FILES
 		$files = $this->request->getFiles();
@@ -39,7 +36,7 @@ class Upload extends ResourceController {
 			$fileExtension = $img->getClientExtension();
 			$fileSize = $img->getSizeByUnit('b');
 			$fileMime = $img->getClientMimeType();
-			$filePath = ROOTPATH . "/" . $uploadDir . "/" . $year . "/" . $month . "/";
+			$filePath = ROOTPATH . "/" . UPLOAD_DIR . "/" . $year . "/" . $month . "/";
 			$img->move($filePath, $fileName.".".$fileExtension);
 
 			// INSERT FILE
@@ -62,13 +59,18 @@ class Upload extends ResourceController {
 				->save($filePath . $fileName."_thumb".".".$fileExtension);
 
 			// RESPOND DATA
-			$dataRespond[] = [
+			$imageData = [
 				"id" => $imageID,
-				"location" => $year . "/" . $month,
+				"name" => $fileName.".".$fileExtension,
 				"thumb" => $fileName."_thumb".".".$fileExtension,
+				"location" => $year."/".$month,
+				"date" => $day."/".$month."/".$year,
+				"size" => $fileSize,
 			];
+
+			$respondData[] = array_merge($imageData, getImageUrl($imageData));
 		}
 
-		return $this->respond($dataRespond, ResponseInterface::HTTP_OK);
+		return $this->respond($respondData, ResponseInterface::HTTP_OK);
 	}
 }

@@ -13,22 +13,22 @@ class Images extends ResourceController {
 			->selectCount('id')
 			->first();
 
-		$dataRespond = [
+		$respondData = [
 			"count" => $imagesCount["id"],
 		];
 
-		return $this->respond($dataRespond, ResponseInterface::HTTP_OK);
+		return $this->respond($respondData, ResponseInterface::HTTP_OK);
 	}
 
 	public function CountInTime() {
 		$params = $this->request->getPostGet();
 
 		if (!isset($params["month"]) || !isset($params["year"])) {
-			$dataRespond = [
+			$respondData = [
 				"error" => "Thiếu 1 trong 2 trường tháng và năm.",
 			];
 
-			return $this->respond($dataRespond, ResponseInterface::HTTP_NOT_FOUND);
+			return $this->respond($respondData, ResponseInterface::HTTP_NOT_FOUND);
 		}
 
 		$month = $params["month"];
@@ -41,20 +41,20 @@ class Images extends ResourceController {
 				"SUBSTRING(date, 7, 4)" => $year,
 			])
 			->first();
-		$dataRespond = [ "count" => $imagesCount["id"] ];
+		$respondData = [ "count" => $imagesCount["id"] ];
 
-		return $this->respond($dataRespond, ResponseInterface::HTTP_OK);
+		return $this->respond($respondData, ResponseInterface::HTTP_OK);
 	}
 
 	public function CountInYear() {
 		$params = $this->request->getPostGet();
 
 		if (!isset($params["year"])) {
-			$dataRespond = [
+			$respondData = [
 				"error" => "Thiếu trường năm.",
 			];
 
-			return $this->respond($dataRespond, ResponseInterface::HTTP_NOT_FOUND);
+			return $this->respond($respondData, ResponseInterface::HTTP_NOT_FOUND);
 		}
 
 		$year = $params["year"];
@@ -72,20 +72,20 @@ class Images extends ResourceController {
 			$result[] = $imageCount["id"];
 		}
 
-		$dataRespond = ["count" => $result];
+		$respondData = ["count" => $result];
 
-		return $this->respond($dataRespond, ResponseInterface::HTTP_NOT_FOUND);
+		return $this->respond($respondData, ResponseInterface::HTTP_NOT_FOUND);
 	}
 
 	public function CountRecent() {
 		$params = $this->request->getPostGet();
 
 		if (!isset($params["numberyearrecent"])) {
-			$dataRespond = [
+			$respondData = [
 				"error" => "Thiếu trường số lượng năm.",
 			];
 
-			return $this->respond($dataRespond, ResponseInterface::HTTP_NOT_FOUND);
+			return $this->respond($respondData, ResponseInterface::HTTP_NOT_FOUND);
 		}
 
 		$numberYearRecent = $params["numberyearrecent"];
@@ -101,9 +101,9 @@ class Images extends ResourceController {
 			$result[$i] = $imageCount["id"];
 		}
 
-		$dataRespond = $result;
+		$respondData = $result;
 
-		return $this->respond($dataRespond, ResponseInterface::HTTP_OK);
+		return $this->respond($respondData, ResponseInterface::HTTP_OK);
 	}
 
 	public function Capacity() {
@@ -113,22 +113,22 @@ class Images extends ResourceController {
 			->selectSum("size")
 			->first();
 
-		$dataRespond = [
+		$respondData = [
 			"capacity" => number_to_size($capacityCount["size"]),
 		];
 
-		return $this->respond($dataRespond, ResponseInterface::HTTP_OK);
+		return $this->respond($respondData, ResponseInterface::HTTP_OK);
 	}
 
 	public function List() {
 		$params = $this->request->getPostGet();
 
 		if (!isset($params["start"]) || !isset($params["perpage"])) {
-			$dataRespond = [
+			$respondData = [
 				"error" => "Thiếu 1 trong 2 trường start hoặc perpage",
 			];
 
-			return $this->respond($dataRespond, ResponseInterface::HTTP_NOT_FOUND);
+			return $this->respond($respondData, ResponseInterface::HTTP_NOT_FOUND);
 		}
 
 		$start = (int)$params["start"];
@@ -142,15 +142,42 @@ class Images extends ResourceController {
 			->orderBy("id", "DESC")
 			->limit($perpage, $start)
 			->findAll();
+		
+		foreach ($imagesData as $key => $value) {
+			$imagesData[$key] = array_merge($value, getImageUrl($value));
+		}
 
 		$imagesTotal = $imagesCounter["id"];
 
-		$dataRespond = [
+		$respondData = [
 			"data" => $imagesData,
 			"count" => count($imagesData),
 			"more" => $start + $perpage < $imagesTotal,
 		];
 
-		return $this->respond($dataRespond, ResponseInterface::HTTP_OK);
+		return $this->respond($respondData, ResponseInterface::HTTP_OK);
+	}
+
+	public function Remove() {
+		helper('filesystem');
+		$imagesModel = new ModelsImages();
+		$body = $this->request->getBody();
+		$param = json_decode($body, true);
+
+		foreach ($param as $key => $value) {
+			$imageID = $value["id"];
+			$urlPath = getImagePath($value);
+			
+			// REMOVE FROM DATABASE
+			$imagesModel
+				->where("id", $imageID)
+				->delete();
+
+			// REMOVE FROM SOURCE
+			unlink($urlPath["imagePath"]);
+			unlink($urlPath["thumbPath"]);
+		}
+
+		return $this->respond(["success" => $param], ResponseInterface::HTTP_OK);
 	}
 }
