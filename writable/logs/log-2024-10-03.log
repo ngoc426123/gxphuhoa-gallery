@@ -1,68 +1,34 @@
-CRITICAL - 2024-10-03 03:49:17 --> ErrorException: Undefined array key "location"
-[Method: POST, Route: upload]
-in APPPATH\Helpers\images_helper.php on line 14.
- 1 APPPATH\Helpers\images_helper.php(14): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined array key "location"', 'D:\\xampp\\htdocs\\gxphuhoa-gallery-BE\\app\\Helpers\\images_helper.php', 14)
- 2 APPPATH\Controllers\Upload.php(70): getImageUrl([...])
- 3 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Upload->index()
- 4 SYSTEMPATH\CodeIgniter.php(509): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Upload))
- 5 SYSTEMPATH\CodeIgniter.php(355): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
- 6 SYSTEMPATH\Boot.php(325): CodeIgniter\CodeIgniter->run()
- 7 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
- 8 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
- 9 SYSTEMPATH\rewrite.php(44): require_once('D:\\xampp\\htdocs\\gxphuhoa-gallery-BE\\public\\index.php')
-CRITICAL - 2024-10-03 03:53:12 --> ErrorException: Undefined array key "location"
-[Method: POST, Route: upload]
-in APPPATH\Helpers\images_helper.php on line 14.
- 1 APPPATH\Helpers\images_helper.php(14): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined array key "location"', 'D:\\xampp\\htdocs\\gxphuhoa-gallery-BE\\app\\Helpers\\images_helper.php', 14)
- 2 APPPATH\Controllers\Upload.php(70): getImageUrl([...])
- 3 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Upload->index()
- 4 SYSTEMPATH\CodeIgniter.php(509): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Upload))
- 5 SYSTEMPATH\CodeIgniter.php(355): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
- 6 SYSTEMPATH\Boot.php(325): CodeIgniter\CodeIgniter->run()
- 7 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
- 8 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
- 9 SYSTEMPATH\rewrite.php(44): require_once('D:\\xampp\\htdocs\\gxphuhoa-gallery-BE\\public\\index.php')
-CRITICAL - 2024-10-03 03:53:49 --> ErrorException: Undefined array key "location"
-[Method: POST, Route: upload]
-in APPPATH\Helpers\images_helper.php on line 14.
- 1 APPPATH\Helpers\images_helper.php(14): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined array key "location"', 'D:\\xampp\\htdocs\\gxphuhoa-gallery-BE\\app\\Helpers\\images_helper.php', 14)
- 2 APPPATH\Controllers\Upload.php(70): getImageUrl([...])
- 3 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Upload->index()
- 4 SYSTEMPATH\CodeIgniter.php(509): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Upload))
- 5 SYSTEMPATH\CodeIgniter.php(355): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
- 6 SYSTEMPATH\Boot.php(325): CodeIgniter\CodeIgniter->run()
- 7 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
- 8 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
- 9 SYSTEMPATH\rewrite.php(44): require_once('D:\\xampp\\htdocs\\gxphuhoa-gallery-BE\\public\\index.php')
-CRITICAL - 2024-10-03 03:54:49 --> ErrorException: Undefined array key "location"
-[Method: POST, Route: upload]
-in APPPATH\Helpers\images_helper.php on line 14.
- 1 APPPATH\Helpers\images_helper.php(14): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined array key "location"', 'D:\\xampp\\htdocs\\gxphuhoa-gallery-BE\\app\\Helpers\\images_helper.php', 14)
- 2 APPPATH\Controllers\Upload.php(70): getImageUrl([...])
- 3 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Upload->index()
- 4 SYSTEMPATH\CodeIgniter.php(509): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Upload))
- 5 SYSTEMPATH\CodeIgniter.php(355): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
- 6 SYSTEMPATH\Boot.php(325): CodeIgniter\CodeIgniter->run()
- 7 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
- 8 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
- 9 SYSTEMPATH\rewrite.php(44): require_once('D:\\xampp\\htdocs\\gxphuhoa-gallery-BE\\public\\index.php')
-CRITICAL - 2024-10-03 04:15:19 --> Error: Call to undefined function App\Controllers\unline()
-[Method: DELETE, Route: images/remove]
-in APPPATH\Controllers\Images.php on line 177.
- 1 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Images->Remove()
- 2 SYSTEMPATH\CodeIgniter.php(509): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Images))
+CRITICAL - 2024-10-03 16:20:46 --> Error: Call to undefined function App\Controllers\now()
+[Method: POST, Route: albums/create]
+in APPPATH\Controllers\Albums.php on line 166.
+ 1 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Albums->Create()
+ 2 SYSTEMPATH\CodeIgniter.php(509): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Albums))
  3 SYSTEMPATH\CodeIgniter.php(355): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
  4 SYSTEMPATH\Boot.php(325): CodeIgniter\CodeIgniter->run()
  5 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
  6 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
  7 SYSTEMPATH\rewrite.php(44): require_once('D:\\xampp\\htdocs\\gxphuhoa-gallery-BE\\public\\index.php')
-CRITICAL - 2024-10-03 04:15:37 --> Error: Call to undefined function App\Controllers\unline()
-[Method: DELETE, Route: images/remove]
-in APPPATH\Controllers\Images.php on line 177.
- 1 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Images->Remove()
- 2 SYSTEMPATH\CodeIgniter.php(509): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Images))
+CRITICAL - 2024-10-03 16:24:20 --> Error: Call to undefined function App\Controllers\now()
+[Method: POST, Route: albums/create]
+in APPPATH\Controllers\Albums.php on line 167.
+ 1 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Albums->Create()
+ 2 SYSTEMPATH\CodeIgniter.php(509): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Albums))
  3 SYSTEMPATH\CodeIgniter.php(355): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
  4 SYSTEMPATH\Boot.php(325): CodeIgniter\CodeIgniter->run()
  5 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
  6 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
  7 SYSTEMPATH\rewrite.php(44): require_once('D:\\xampp\\htdocs\\gxphuhoa-gallery-BE\\public\\index.php')
+CRITICAL - 2024-10-03 16:37:07 --> CodeIgniter\Database\Exceptions\DataException: Allowed fields must be specified for model: "App\Models\Albums"
+[Method: POST, Route: albums/create]
+in SYSTEMPATH\Model.php on line 824.
+ 1 SYSTEMPATH\Model.php(824): CodeIgniter\Database\Exceptions\DataException::forInvalidAllowedFields('App\\Models\\Albums')
+ 2 SYSTEMPATH\BaseModel.php(821): CodeIgniter\Model->doProtectFieldsForInsert([...])
+ 3 SYSTEMPATH\Model.php(802): CodeIgniter\BaseModel->insert([...], true)
+ 4 APPPATH\Controllers\Albums.php(176): CodeIgniter\Model->insert([...])
+ 5 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\Albums->Create()
+ 6 SYSTEMPATH\CodeIgniter.php(509): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Albums))
+ 7 SYSTEMPATH\CodeIgniter.php(355): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(325): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+11 SYSTEMPATH\rewrite.php(44): require_once('D:\\xampp\\htdocs\\gxphuhoa-gallery-BE\\public\\index.php')

@@ -90,6 +90,14 @@ $routes->group('', ['filter' => 'cors'], static function($routes) {
   /**
    * NO PARAMS
    */
+  $routes->post('/albums/create', 'Albums::Create');
+  /**
+   * BODY JSON DATA
+   * {
+   *    album_title: <string>
+   *    list_images: array<images>
+   * }
+   */
   
   /*********************/
   /****** DIRECTORY ****/

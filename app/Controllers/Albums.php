@@ -6,6 +6,7 @@ use App\Models\Albums as ModelsAlbums;
 use App\Models\Images as ModelImages;
 use CodeIgniter\RESTful\ResourceController;
 use CodeIgniter\HTTP\ResponseInterface;
+use CodeIgniter\I18n\Time;
 
 class Albums extends ResourceController {
 	public function Count() {
@@ -146,5 +147,35 @@ class Albums extends ResourceController {
 		];
 
 		return $this->respond($respondData, ResponseInterface::HTTP_OK);
+	}
+
+	public function Create() {
+		$body = $this->request->getBody();
+		$params = json_decode($body, true);
+
+		if (!isset($params["album_title"]) || !isset($params["list_images"])) {
+			$respondData = [
+				"error" => "Thiếu 1 trong 2 trường album_title hoặc list_images",
+			];
+
+			return $this->respond($respondData, ResponseInterface::HTTP_NOT_FOUND);
+		}
+
+		helper('text');
+		$albumsModel = new ModelsAlbums();
+		$myTime = Time::now("Asia/Ho_Chi_Minh");
+		$dataAlbumsInsert = [
+			"id" => "",
+			"name" =>  $params["album_title"],
+			"slug" => url_title(convert_accented_characters(strtolower($params["album_title"]), '-')),
+			"date" => $myTime->toLocalizedString(),
+			"sl" => count($params["list_images"]),
+			"stt" => 1,
+		];
+
+		$albumsModel->insert($dataAlbumsInsert);
+
+		$IDAlbumInsert = $albumsModel->insertID();
+		echo $IDAlbumInsert;
 	}
 }

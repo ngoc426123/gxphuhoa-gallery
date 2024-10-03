@@ -6,13 +6,9 @@ use App\Models\Activities as ModelsActivities;
 use App\Models\ActivitiesModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
+use CodeIgniter\I18n\Time;
 
 class Activities extends ResourceController {
-	/**
-	 * Return an array of resource objects, themselves in array format.
-	 *
-	 * @return ResponseInterface
-	 */
 	public function Index() {
 		$ActivitiesModel = new ModelsActivities();
 		$activitiesData = $ActivitiesModel
@@ -23,18 +19,14 @@ class Activities extends ResourceController {
 		return $this->respond($activitiesData, ResponseInterface::HTTP_ACCEPTED);
 	}
 
-	/**
-	 * Create a new resource object, from "posted" parameters.
-	 *
-	 * @return ResponseInterface
-	 */
 	public function Create() {
 		$ActivitiesModel = new ModelsActivities();
 		$body = $this->request->getBody();
 		$param = json_decode($body);
 		$username = $param->user_login;
 		$email = $param->user_email;
-		$date = get_current_time();
+		$myTime = Time::now("Asia/Ho_Chi_Minh");
+		$date = $myTime->toLocalizedString();
 		$data = [
 			"username" => $username,
 			"email" => $email,
@@ -45,16 +37,5 @@ class Activities extends ResourceController {
 			->upsert($data);
 
 		return $this->respond($data, ResponseInterface::HTTP_ACCEPTED);
-	}
-
-	/**
-	 * Delete the designated resource object from the model.
-	 *
-	 * @param int|string|null $id
-	 *
-	 * @return ResponseInterface
-	 */
-	public function delete($id = null) {
-		//
 	}
 }
