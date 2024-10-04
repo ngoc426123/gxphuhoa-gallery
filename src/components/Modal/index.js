@@ -15,15 +15,15 @@ export function Modal(props) {
   const cls = {
     modal: 'flex items-center justify-center w-screen h-screen px-5 fixed top-0 left-0 z-40',
     overlay: 'w-full h-full bg-sky-950/60 absolute top-0 left-0 z-0',
-    inner: clsx('inline-block w-full max-w-xl px-10 py-12 rounded-lg bg-stone-50 relative z-10', customClass),
+    inner: clsx('inline-block w-full max-w-xl px-10 py-12 rounded-lg bg-stone-50 relative z-10 overflow-hidden', customClass),
   }
 
   // RENDER
   return {
     false: <></>,
     true: (
-      <div className={cls.modal} data-alert>
-        <div className={cls.inner}>
+      <div className={cls.modal} data-modal>
+        <div className={cls.inner} data-modal-content>
           {children}
         </div>
         <div className={cls.overlay}></div>
