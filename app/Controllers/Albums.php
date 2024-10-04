@@ -133,14 +133,18 @@ class Albums extends ResourceController {
 			->select("id, name, slug, date, sl")
 			->orderBy("id", "DESC")
 			->where("id", $id)
-			->findAll();
+			->first();
 		$imagesData = $imagesModel
-			->select("images.id, images.thumb, images.location")
+			->select("images.name, images.id, images.thumb, images.location")
 			->join("relationships", "relationships.id_images = images.id")
 			->join("albums", "albums.id = relationships.id_albums")
 			->where("albums.id", $id)
 			->orderBy("images.id", "ASC")
 			->findAll();
+
+		foreach ($imagesData as $key => $value) {
+			$imagesData[$key]=array_merge($value, getImageUrl($value));
+		}
 		
 		$respondData = [
 			"detail" => $albumsData,
@@ -196,6 +200,41 @@ class Albums extends ResourceController {
 
 		// RESNPOND DATA
 		$respondData = ["albumsID" => $IDAlbumInsert];
+		return $this->respond($respondData, ResponseInterface::HTTP_OK);
+	}
+
+	public function Update($id = null) {
+		$body = $this->request->getBody();
+		$params = json_decode($body, true);
+
+		if (!isset($params["album_title"])) {
+			$respondData = [
+				"error" => "Thiếu trường album_title",
+			];
+
+			return $this->respond($respondData, ResponseInterface::HTTP_NOT_FOUND);
+		}
+
+		helper('text');
+		$albumsModel = new ModelsAlbums();
+
+		// DATA EDIT ALBUMS
+		$albumTitle = $params["album_title"];
+		$dataAlbumsEdit = [
+			"name" =>  $albumTitle,
+			"slug" => url_title(convert_accented_characters(strtolower($albumTitle), '-')),
+		];
+
+		$albumsModel
+			->set($dataAlbumsEdit)
+			->where("id", $id)
+			->update();
+
+		// RESNPOND DATA
+		$respondData = [
+			"albumsID" => $id,
+			"albumsTitle" => $params["album_title"],
+		];
 		return $this->respond($respondData, ResponseInterface::HTTP_OK);
 	}
 }

@@ -98,6 +98,14 @@ $routes->group('', ['filter' => 'cors'], static function($routes) {
    *    list_images: array<images>
    * }
    */
+  $routes->post('/albums/update/(:num)', 'Albums::Update/$1');
+  /**
+   * BODY JSON DATA
+   * {
+   *    album_id: <number>
+   *    album_title: <string>
+   * }
+   */
   
   /*********************/
   /****** DIRECTORY ****/

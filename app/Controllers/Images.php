@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\Images as ModelsImages;
+use App\Models\Relationships as ModelRelationships;
 use CodeIgniter\RESTful\ResourceController;
 use CodeIgniter\HTTP\ResponseInterface;
 
@@ -161,6 +162,7 @@ class Images extends ResourceController {
 	public function Remove() {
 		helper('filesystem');
 		$imagesModel = new ModelsImages();
+		$relationshipsModel = new ModelRelationships();
 		$body = $this->request->getBody();
 		$param = json_decode($body, true);
 
@@ -171,6 +173,10 @@ class Images extends ResourceController {
 			// REMOVE FROM DATABASE
 			$imagesModel
 				->where("id", $imageID)
+				->delete();
+
+			$relationshipsModel
+				->where("id_images", $imageID)
 				->delete();
 
 			// REMOVE FROM SOURCE
