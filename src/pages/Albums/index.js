@@ -41,6 +41,8 @@ export default function Albums() {
 
   // METHOD
   const getList = useCallback(async () => {
+    dispatch(setOpenLoading(true));
+
     try {
       const urlApi = process.env.REACT_APP_API + '/albums/list?start=0&perpage=10';
       const { data } = await axios.get(urlApi);
@@ -49,6 +51,8 @@ export default function Albums() {
     } catch(error) {
       console.error(error);
     }
+
+    dispatch(setOpenLoading(false));
   }, [dispatch]);
 
   const handleGetContextMenuPos = (data) => {
@@ -87,7 +91,7 @@ export default function Albums() {
     try {
       const urlApi = process.env.REACT_APP_API + `/albums/update/${currentAlbum}`;
       const params = JSON.stringify({ album_title: albumTitleModal });
-      const { data: { albumsID, albumsTitle } } = await axios.post(urlApi, params);
+      const { data: { albumsID, albumsTitle } } = await axios.put(urlApi, params);
       const listAlbumsCopy = [...listAlbums];
       const listAlbumsFilter = listAlbumsCopy.map(item => {
         if (item.id === albumsID) {
@@ -155,7 +159,7 @@ export default function Albums() {
   // SIDE EFFECT
   useEffect(() => {
     document.title = 'Albums - Thư viện ảnh - Giáo Xứ Phú Hoà';
-    !listAlbums.length && getList();
+    !listAlbums && getList();
   }, [listAlbums, getList]);
 
   // CONTEXT MENU

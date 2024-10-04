@@ -7,7 +7,7 @@ const initialState = {
   titleAddAlbum: '',
   listImagesAlbums: [],
   listImagesAddAlbums: [],
-  listAlbums: [],
+  listAlbums: null,
 }
 
 export const images = createSlice({

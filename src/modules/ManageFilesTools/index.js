@@ -84,6 +84,8 @@ export default function ManageFilesTools() {
       desc: null,
     }));
 
+    dispatch(setOpenLoading(true));
+
     try {
       const params = JSON.stringify(filesSelected);
       const urlAPI = process.env.REACT_APP_API + '/images/remove';
@@ -101,6 +103,8 @@ export default function ManageFilesTools() {
     } catch (error) {
       console.error(error);
     }
+
+    dispatch(setOpenLoading(false));
   }
 
   const handleEventAddAlbums = () => {
@@ -149,8 +153,17 @@ export default function ManageFilesTools() {
     try {
       const urlApi = process.env.REACT_APP_API + `/albums/update/${idAlbums}`;
       const params = JSON.stringify({ album_title: titleAlbum });
-      const { data: { albumsID, albumsTitle } } = await axios.post(urlApi, params);
+      const { data: { albumsID, albumsTitle } } = await axios.put(urlApi, params);
+      const listAlbumsCopy = [...listAlbums];
+      const listAlbumsFilter = listAlbumsCopy.map(item => {
+        if (item.id === albumsID) {
+          item = { ...item, name: albumsTitle };
+        }
 
+        return item;
+      });
+
+      dispatch(setListAlbums(listAlbumsFilter));
       dispatch(setIdAlbum(albumsID));
       dispatch(setTitleAlbum(albumsTitle));
       dispatch(setTitleAlbumCompare(albumsTitle));
@@ -162,6 +175,8 @@ export default function ManageFilesTools() {
   }
 
   const getListAlbums = useCallback(async () => {
+    dispatch(setOpenLoading(true));
+
     try {
       const urlApi = process.env.REACT_APP_API + '/albums/list?start=0&perpage=10';
       const { data } = await axios.get(urlApi);
@@ -170,11 +185,39 @@ export default function ManageFilesTools() {
     } catch(error) {
       console.error(error);
     }
+
+    dispatch(setOpenLoading(false));
   }, [dispatch]);
+
+  const handleEventAppendImageToAlbum = async ($albumID) => {
+    dispatch(setOpenLoading(true));
+
+    try {
+      const urlApi = process.env.REACT_APP_API + `/albums/append/${$albumID}`;
+      const { data } = await axios.put(urlApi, { data: filesSelected });
+      const albumsID = data.data.id;
+      const listAlbumsCopy = [...listAlbums];
+      const listAlbumsFilter = listAlbumsCopy.map(item => {
+        if (item.id === albumsID) {
+          item = { ...item, ...data.data };
+        }
+
+        return item;
+      });
+
+      dispatch(setListAlbums(listAlbumsFilter));
+      setOpenModalSelectAlbums(false);
+      navigate(`albums/${albumsID}`);
+    } catch (error) {
+      console.error(error);
+    }
+
+    dispatch(setOpenLoading(false));
+  }
 
   // SIDE EFFECT
   useEffect(() => {
-    !listAlbums.length && getListAlbums();
+    !listAlbums && getListAlbums();
   }, [listAlbums, getListAlbums]);
 
   // CLASS
@@ -261,12 +304,16 @@ export default function ManageFilesTools() {
               onClick={handleAddNewAlbums}
             >
               <FontAwesomeIcon icon={faPlus} className={cls.albumAddNewCtaIcon}/>
-              <span>Thêm mới</span>
+              <span>Tạo mới album</span>
             </button>
           </div>
           <div className={cls.albumAddList}>
             {listAlbums && listAlbums.map(item => (
-              <div key={item.id} className={cls.albumAddItem} >
+              <div
+                key={item.id}
+                className={cls.albumAddItem}
+                onClick={() => handleEventAppendImageToAlbum(item.id)}
+              >
                 <div className={cls.albumAddItemImage}>
                   <img src={item.thumbnail.thumbUrl} className={cls.albumAddItemImg} alt=""/>
                 </div>
