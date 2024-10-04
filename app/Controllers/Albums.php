@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Models\Albums as ModelsAlbums;
 use App\Models\Images as ModelImages;
+use App\Models\Relationships as ModelRelationships;
 use CodeIgniter\RESTful\ResourceController;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\I18n\Time;
@@ -164,6 +165,8 @@ class Albums extends ResourceController {
 		helper('text');
 		$albumsModel = new ModelsAlbums();
 		$myTime = Time::now("Asia/Ho_Chi_Minh");
+
+		// CREATE ALBUMS
 		$dataAlbumsInsert = [
 			"id" => "",
 			"name" =>  $params["album_title"],
@@ -174,8 +177,25 @@ class Albums extends ResourceController {
 		];
 
 		$albumsModel->insert($dataAlbumsInsert);
-
 		$IDAlbumInsert = $albumsModel->insertID();
-		echo $IDAlbumInsert;
+
+		// CREATE RELATIONSHIPS ALBUMS AND IMAGES
+		$dataImagesRelationshipInsert = [];
+
+		foreach ($params["list_images"] as $key => $value) {
+			$dataImagesRelationshipInsert[] = [
+				"id" => "",
+				"id_albums" => $IDAlbumInsert,
+				"id_images" => $value["id"]
+			];
+		}
+		
+		$relationshipsModel = new ModelRelationships();
+		$relationshipsModel
+			->insertBatch($dataImagesRelationshipInsert);
+
+		// RESNPOND DATA
+		$respondData = ["albumsID" => $IDAlbumInsert];
+		return $this->respond($respondData, ResponseInterface::HTTP_OK);
 	}
 }
