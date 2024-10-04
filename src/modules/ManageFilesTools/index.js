@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { clearFiles } from "../../store/manfiles";
 import { setListImages } from "../../store/images";
 import { setFilesUploaded } from "../../store/uploadfiles";
-import { setListImagesAddAlbums } from "../../store/albums";
+import { setListImagesAddAlbums, setTitleAddAlbum } from "../../store/albums";
 import { setOpenLoading } from "../../store/root";
 
 // ICONS
@@ -107,16 +107,18 @@ export default function ManageFilesTools() {
         album_title: titleAddAlbum,
         list_images: listImagesAddAlbums,
       });
-      const { data } = await axios.post(urlApi, params);
+      const { data: { albumsID } } = await axios.post(urlApi, params);
 
-      console.log(data);
+      dispatch(setTitleAddAlbum(''));
+      dispatch(setListImagesAddAlbums([]));
+      navigate(`albums/${albumsID}`);
     } catch (error) {
       console.error(error);
     }
   
     dispatch(setOpenLoading(false));
   }
- 
+
   // CLASS
   const cls = useMemo(() => ({
     wrap: clsx(
