@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import { Bar } from "react-chartjs-2";
 
+// REDUX
+import { useSelector } from "react-redux";
+
 // IMAGES
 import { clsx } from "clsx";
 import Cover_img from "../../assets/images/dashboard-cover.svg";
@@ -12,6 +15,7 @@ import Box from "../../components/Box";
 
 export default function Dashbroad() {
   // STATE
+  const { config } = useSelector(state => state.root);
   const [inYearData] = useState({
     data: {
       labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dev'],
@@ -93,8 +97,8 @@ export default function Dashbroad() {
 
   // SIDE EFFECT
   useEffect(() => {
-    document.title = 'Bảng quản lý - Thư viện ảnh - Giáo Xứ Phú Hoà';
-  }, []);
+    document.title = 'Bảng quản lý - ' + config.site_title;
+  }, [config]);
 
   // CLASS
   const cls = {

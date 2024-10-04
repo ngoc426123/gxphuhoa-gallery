@@ -12,6 +12,7 @@ export default function UploadFiles() {
   const dispatch = useDispatch();
 
   // STATE
+  const { config } = useSelector(state => state.root);
   const { filesUploaded } = useSelector(state => state.uploadfiles);
   const { filesSelected } = useSelector(state => state.manfiles);
   const listImagesFill = useMemo(() => {
@@ -33,14 +34,14 @@ export default function UploadFiles() {
 
   // SIDE EFFECT
   useEffect(() => {
-    document.title = 'Hình Upload -  Thư viện ảnh - Giáo Xứ Phú Hoà';
+    document.title = 'Hình Upload - ' + config.site_title;
   
     return () => {
       dispatch(clearFiles());
       dispatch(setFilesUploaded([]));
       dispatch(setOpenManPopup(false));
     }
-  }, [dispatch]);
+  }, [dispatch, config]);
 
   // CLASS
   const cls = {

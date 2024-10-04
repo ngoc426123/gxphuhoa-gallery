@@ -14,6 +14,7 @@ export default function Images() {
   const dispatch = useDispatch();
 
   // STATE
+  const { config } = useSelector(state => state.root);
   const { filesSelected } = useSelector(state => state.manfiles);
   const { listImages } = useSelector(state => state.images);
   const listImagesFill = useMemo(() => {
@@ -52,13 +53,13 @@ export default function Images() {
   }, [getListImages]);
 
   useEffect(() => {
-    document.title = 'Hình ảnh - Thư viện ảnh - Giáo Xứ Phú Hoà';
+    document.title = 'Hình ảnh - ' + config.site_title;
 
     return () => {
       dispatch(clearFiles());
       dispatch(setOpenManPopup(false));
     }
-  }, [dispatch]);
+  }, [dispatch, config]);
 
   // CLASS
   const cls = {

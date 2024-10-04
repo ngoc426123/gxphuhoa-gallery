@@ -27,6 +27,7 @@ export default function Albums() {
 
   // STATE
   const { listAlbums } = useSelector(state => state.albums);
+  const { config } = useSelector(state => state.root);
   const [currentAlbum, setCurrentAlbum] = useState(0); // STORE ALBUM ID
   const [menuPosition, setMenuPosition] = useState({});
   const [openMenu, setOpenMenu] = useState(false);
@@ -158,9 +159,9 @@ export default function Albums() {
 
   // SIDE EFFECT
   useEffect(() => {
-    document.title = 'Albums - Thư viện ảnh - Giáo Xứ Phú Hoà';
+    document.title = 'Albums - ' + config.site_title;
     !listAlbums && getList();
-  }, [listAlbums, getList]);
+  }, [listAlbums, getList, config]);
 
   // CONTEXT MENU
   const contextMenu = useMemo(() => ({
