@@ -7,6 +7,7 @@ const initialState = {
   titleAddAlbum: '',
   listImagesAlbums: [],
   listImagesAddAlbums: [],
+  listAlbums: [],
 }
 
 export const images = createSlice({
@@ -36,6 +37,10 @@ export const images = createSlice({
     setListImagesAddAlbums: (state, action) => {
       state.listImagesAddAlbums = action.payload;
     },
+
+    setListAlbums: (state, action) => {
+      state.listAlbums = action.payload;
+    },
   },
 });
 
@@ -46,5 +51,6 @@ export const {
   setTitleAddAlbum,
   setListImagesAlbums,
   setListImagesAddAlbums,
+  setListAlbums,
 } = images.actions;
 export default images.reducer;

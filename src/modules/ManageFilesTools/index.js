@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import clsx from "clsx";
 import axios from "axios";
 import { Alert } from "../../components/Alert";
@@ -17,6 +17,7 @@ import {
   setListImagesAlbums,
   setListImagesAddAlbums,
   setTitleAddAlbum,
+  setListAlbums,
 } from "../../store/albums";
 import { setOpenLoading } from "../../store/root";
 
@@ -33,7 +34,7 @@ export default function ManageFilesTools() {
   const { filesUploaded } = useSelector(state => state.uploadfiles);
   const { filesSelected } = useSelector(state => state.manfiles);
   const { listImages } = useSelector(state => state.images);
-  const { idAlbums, titleAlbum, listImagesAlbums } = useSelector(state => state.albums);
+  const { idAlbums, titleAlbum, listImagesAlbums, listAlbums } = useSelector(state => state.albums);
   const { titleAddAlbum, titleAlbumCompare, listImagesAddAlbums } = useSelector(state => state.albums);
   const [alertRemoveImage, setAlertRemoveImage] = useState({
     open: false,
@@ -127,8 +128,11 @@ export default function ManageFilesTools() {
         album_title: titleAddAlbum,
         list_images: listImagesAddAlbums,
       });
-      const { data: { albumsID } } = await axios.post(urlApi, params);
+      const { data } = await axios.post(urlApi, params);
+      const listAlbumsAdd = [data.data, ...listAlbums];
+      const albumsID = data.data.id;
 
+      dispatch(setListAlbums(listAlbumsAdd));
       dispatch(setTitleAddAlbum(''));
       dispatch(setListImagesAddAlbums([]));
       navigate(`albums/${albumsID}`);
@@ -157,6 +161,22 @@ export default function ManageFilesTools() {
     dispatch(setOpenLoading(false));
   }
 
+  const getListAlbums = useCallback(async () => {
+    try {
+      const urlApi = process.env.REACT_APP_API + '/albums/list?start=0&perpage=10';
+      const { data } = await axios.get(urlApi);
+
+      dispatch(setListAlbums(data.data));
+    } catch(error) {
+      console.error(error);
+    }
+  }, [dispatch]);
+
+  // SIDE EFFECT
+  useEffect(() => {
+    !listAlbums.length && getListAlbums();
+  }, [listAlbums, getListAlbums]);
+
   // CLASS
   const cls = useMemo(() => ({
     wrap: clsx(
@@ -167,11 +187,17 @@ export default function ManageFilesTools() {
     close: 'size-10 mr-2 rounded-full transition-all hover:bg-slate-100',
     btnNormal: 'size-10 rounded-full transition-all hover:bg-slate-100',
     btnCheck: 'size-10 rounded-full text-green-600 hover:bg-slate-100 disabled:text-slate-300',
+    popupAddAlbums: '!max-w-96 py-14 pb-4 !px-2',
     albumSelect: 'w-full',
     albumSelectAddNew: 'w-full',
-    albumAddNewCta: 'px-4 py-3 rounded-lg transition-all hover:bg-slate-200',
+    albumAddNewCta: 'block w-full px-8 pl-[2.8rem] py-4 text-left transition-all hover:bg-slate-200',
     albumAddNewCtaIcon: 'mr-4',
     albumAddNewClose: 'size-12 bg-slate-200 absolute top-0 right-0',
+    albumAddList: 'max-h-80 overflow-hidden overflow-y-auto custom-scroll',
+    albumAddItem: 'flex items-center px-8 py-3 cursor-pointer transition-all hover:bg-slate-200',
+    albumAddItemImage: 'size-10 mr-4 rounded-lg overflow-hidden shrink-0',
+    albumAddItemImg: 'size-16',
+    albumAddItemName: 'text-sm',
   }), [filesSelected, titleAddAlbum, avaiableCTAEditAlbums]);
 
   // RENDER
@@ -227,7 +253,7 @@ export default function ManageFilesTools() {
         </div>
       </div>
       {/* POPUP SELECT ALBUMS */}
-      <Modal open={openModalSelectAlbums} customClass="!max-w-96">
+      <Modal open={openModalSelectAlbums} customClass={cls.popupAddAlbums}>
         <div className={cls.albumSelect}>
           <div className={cls.albumSelectAddNew}>
             <button
@@ -237,6 +263,16 @@ export default function ManageFilesTools() {
               <FontAwesomeIcon icon={faPlus} className={cls.albumAddNewCtaIcon}/>
               <span>Thêm mới</span>
             </button>
+          </div>
+          <div className={cls.albumAddList}>
+            {listAlbums && listAlbums.map(item => (
+              <div key={item.id} className={cls.albumAddItem} >
+                <div className={cls.albumAddItemImage}>
+                  <img src={item.thumbnail.thumbUrl} className={cls.albumAddItemImg} alt=""/>
+                </div>
+                <div className={cls.albumAddItemName}>{item.name}</div>
+              </div>
+            ))}
           </div>
           <button
             className={cls.albumAddNewClose}

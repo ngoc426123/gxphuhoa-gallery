@@ -3,126 +3,30 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 // COMPONENTS
 import AlbumsItem from "../../components/AlbumsItem";
 import ContextMenu from "../../components/ContextMenu";
-
-// ICONS
-import { faEdit, faEye, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { Modal } from "../../components/Modal";
 import { Form } from "../../components/commons/Form";
 import Cta from "../../components/commons/Cta";
 import { Alert } from "../../components/Alert";
 
+// ICONS
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faClose, faEdit, faEye, faTrash } from "@fortawesome/free-solid-svg-icons";
+
+// REDUX
+import { useDispatch, useSelector } from "react-redux";
+import { setListAlbums } from "../../store/albums";
+import { setOpenLoading } from "../../store/root";
+
+import axios from "axios";
+
 export default function Albums() {
+  const dispatch = useDispatch();
+
   // REF
   const _albums = useRef();
 
   // STATE
-  const [listAlbums] = useState([
-    {
-      id: 1,
-      title: 'Lorem Ipsum is simply dummy text of the printing',
-      count: 12,
-      thumb: 'https://fastly.picsum.photos/id/323/1024/768.jpg?hmac=dyw3O8tEM1SdQhMJNK0nyipazjYNDiZoZTa4GUSfIv0',
-      link: '/albums/1',
-    },
-    {
-      id: 2,
-      title: 'Scrambled it to make a type specimen book',
-      count: 22,
-      thumb: 'https://fastly.picsum.photos/id/324/1024/768.jpg?hmac=xnsrn34FoMOmOwJ8qI3vV8bfr0vtJQ45n59Ke88RaZs',
-      link: '/albums/2',
-    },
-    {
-      id: 3,
-      title: 'It has survived not only five centuries',
-      count: 18,
-      thumb: 'https://fastly.picsum.photos/id/433/1024/768.jpg?hmac=y5rwdoM6maqC7z7az-4GA9OVUNcs7ucKSDP_I6kJNZI',
-      link: '/albums/3',
-    },
-    {
-      id: 4,
-      title: 'Contrary to popular belief, Lorem Ipsum is not simply random text.',
-      count: 28,
-      thumb: 'https://fastly.picsum.photos/id/556/1024/768.jpg?hmac=A6j1cRUDZYgpdj7mPSf9k93jN_4N8ZgmcdSh67eymKs',
-      link: '/albums/4',
-    },
-    {
-      id: 5,
-      title: 'Discovered the undoubtable source',
-      count: 77,
-      thumb: 'https://fastly.picsum.photos/id/758/1024/768.jpg?hmac=o7H6IC-2flSvHUh_8PnNHFu3_QiKQlpfCI6ysJvwTIc',
-      link: '/albums/5',
-    },
-    {
-      id: 6,
-      title: 'The first line of Lorem Ipsum',
-      count: 48,
-      thumb: 'https://fastly.picsum.photos/id/81/1024/768.jpg?hmac=odWnMIj_zOgFtQ7nDn6WWLdohOCv9miIDdt6oSrB3h8',
-      link: '/albums/6',
-    },
-    {
-      id: 7,
-      title: 'There are many variations of passages of Lorem Ipsum available',
-      count: 22,
-      thumb: 'https://fastly.picsum.photos/id/181/1024/768.jpg?hmac=o2rIqbKjDJ--41SIschr9wTLCkLrtFkM7XEAN_ZiO-Q',
-      link: '/albums/6',
-    },
-    {
-      id: 8,
-      title: 'Lorem Ipsum is simply dummy text of the printing',
-      count: 12,
-      thumb: 'https://fastly.picsum.photos/id/323/1024/768.jpg?hmac=dyw3O8tEM1SdQhMJNK0nyipazjYNDiZoZTa4GUSfIv0',
-      link: '/albums/1',
-    },
-    {
-      id: 9,
-      title: 'Scrambled it to make a type specimen book',
-      count: 22,
-      thumb: 'https://fastly.picsum.photos/id/324/1024/768.jpg?hmac=xnsrn34FoMOmOwJ8qI3vV8bfr0vtJQ45n59Ke88RaZs',
-      link: '/albums/2',
-    },
-    {
-      id: 10,
-      title: 'It has survived not only five centuries',
-      count: 18,
-      thumb: 'https://fastly.picsum.photos/id/433/1024/768.jpg?hmac=y5rwdoM6maqC7z7az-4GA9OVUNcs7ucKSDP_I6kJNZI',
-      link: '/albums/3',
-    },
-    {
-      id: 11,
-      title: 'Contrary to popular belief, Lorem Ipsum is not simply random text.',
-      count: 28,
-      thumb: 'https://fastly.picsum.photos/id/556/1024/768.jpg?hmac=A6j1cRUDZYgpdj7mPSf9k93jN_4N8ZgmcdSh67eymKs',
-      link: '/albums/4',
-    },
-    {
-      id: 12,
-      title: 'Discovered the undoubtable source',
-      count: 77,
-      thumb: 'https://fastly.picsum.photos/id/758/1024/768.jpg?hmac=o7H6IC-2flSvHUh_8PnNHFu3_QiKQlpfCI6ysJvwTIc',
-      link: '/albums/5',
-    },
-    {
-      id: 13,
-      title: 'The first line of Lorem Ipsum',
-      count: 48,
-      thumb: 'https://fastly.picsum.photos/id/81/1024/768.jpg?hmac=odWnMIj_zOgFtQ7nDn6WWLdohOCv9miIDdt6oSrB3h8',
-      link: '/albums/6',
-    },
-    {
-      id: 14,
-      title: 'There are many variations of passages of Lorem Ipsum available',
-      count: 22,
-      thumb: 'https://fastly.picsum.photos/id/181/1024/768.jpg?hmac=o2rIqbKjDJ--41SIschr9wTLCkLrtFkM7XEAN_ZiO-Q',
-      link: '/albums/6',
-    },
-    {
-      id: 15,
-      title: 'The first line of Lorem Ipsum',
-      count: 48,
-      thumb: 'https://fastly.picsum.photos/id/81/1024/768.jpg?hmac=odWnMIj_zOgFtQ7nDn6WWLdohOCv9miIDdt6oSrB3h8',
-      link: '/albums/6',
-    },
-  ]);
+  const { listAlbums } = useSelector(state => state.albums);
   const [currentAlbum, setCurrentAlbum] = useState(0); // STORE ALBUM ID
   const [menuPosition, setMenuPosition] = useState({});
   const [openMenu, setOpenMenu] = useState(false);
@@ -135,12 +39,18 @@ export default function Albums() {
     desc: '',
   });
 
-  // SIDE EFFECT
-  useEffect(() => {
-    document.title = 'Albums - Thư viện ảnh - Giáo Xứ Phú Hoà'; 
-  }, []);
-
   // METHOD
+  const getList = useCallback(async () => {
+    try {
+      const urlApi = process.env.REACT_APP_API + '/albums/list?start=0&perpage=10';
+      const { data } = await axios.get(urlApi);
+
+      dispatch(setListAlbums(data.data));
+    } catch(error) {
+      console.error(error);
+    }
+  }, [dispatch]);
+
   const handleGetContextMenuPos = (data) => {
     setMenuPosition(oldData => ({...oldData, ...data}))
   };
@@ -151,25 +61,51 @@ export default function Albums() {
 
   const handleOpenContextMenu = () => {
     setOpenMenu(true);
-  }
+  };
 
   const handleCloseContextMenu = () => {
     setOpenMenu(false);
-  }
+  };
 
   const handleViewAlbum = (id) => {
     console.log(`View ${id}`);
-  }
+  };
 
   const handleOpenPopupRenameAlbum = () => {
     setOpenModal(true);
-  }
+  };
 
-  const handleEventUpdateAlbumName = () => {
-    console.log(currentAlbum, albumTitleModal);
+  const handleClosePopupRenameAlbum = () => {
     setOpenModal(false);
-    setAlbumTitleModal('')
-  }
+  };
+
+  const handleEventUpdateAlbumName = async () => {
+    if (!albumTitleModal.length) return;
+
+    dispatch(setOpenLoading(true));
+
+    try {
+      const urlApi = process.env.REACT_APP_API + `/albums/update/${currentAlbum}`;
+      const params = JSON.stringify({ album_title: albumTitleModal });
+      const { data: { albumsID, albumsTitle } } = await axios.post(urlApi, params);
+      const listAlbumsCopy = [...listAlbums];
+      const listAlbumsFilter = listAlbumsCopy.map(item => {
+        if (item.id === albumsID) {
+          item = { ...item, name: albumsTitle };
+        }
+
+        return item;
+      });
+
+      dispatch(setListAlbums(listAlbumsFilter));
+      setOpenModal(false);
+      setAlbumTitleModal('')
+    } catch (error) {
+      console.error(error);
+    }
+    
+    dispatch(setOpenLoading(false));
+  };
 
   const handleEventKeyupUpdateAlbumName = (e) => {
     const { key, shiftKey, altKey, ctrlKey } = e;
@@ -179,17 +115,48 @@ export default function Albums() {
 
       handleEventUpdateAlbumName();
     }
-  }
+  };
 
-  const handleRemoveAlbum = useCallback(() => {
+  const handleOpenPopupRemoveAlbum = useCallback(() => {
+    const listAlbumsCopy = [...listAlbums];
+    const { name } = listAlbumsCopy.filter(item => item.id === currentAlbum)[0];
+
     setAlert(data => ({
       ...data,
       open: true,
       status: 2,
-      title: `Xoá Album: ${currentAlbum}`,
+      title: `Xoá Album: ${name}`,
       desc: 'Bạn muốn xoá Album này chứ. Ảnh có trong album bị xoá vẫn còn trên hệ thống, thao tác này chỉ xoá album.'
     }))
-  }, [currentAlbum]);
+  }, [listAlbums, currentAlbum]);
+
+  const handleClosePopupRemoveAlbum = () => {
+    setAlert(data => ({ ...data, open: false }));
+  };
+
+  const handleEventRemoveAlbum = async () => {
+    dispatch(setOpenLoading(true));
+
+    try {
+      const urlApi = process.env.REACT_APP_API + `/albums/remove/${currentAlbum}`;
+      const { data: { albumsID } } = await axios.delete(urlApi);
+      const listAlbumsCopy = [...listAlbums];
+      const listAlbumsFilter = listAlbumsCopy.filter(item => item.id !== albumsID);
+
+      dispatch(setListAlbums(listAlbumsFilter));
+      setAlert(data => ({ ...data, open: false }));
+    } catch (error) {
+      console.error(error);
+    }
+    
+    dispatch(setOpenLoading(false));
+  };
+
+  // SIDE EFFECT
+  useEffect(() => {
+    document.title = 'Albums - Thư viện ảnh - Giáo Xứ Phú Hoà';
+    !listAlbums.length && getList();
+  }, [listAlbums, getList]);
 
   // CONTEXT MENU
   const contextMenu = useMemo(() => ({
@@ -198,27 +165,28 @@ export default function Albums() {
     menus: [
       { text: 'Xem menu', icon: faEye, onClick: () => handleViewAlbum() },
       { text: 'Đổi tên', icon: faEdit, onClick: () => handleOpenPopupRenameAlbum() },
-      { text: 'Xoá album', icon: faTrash, onClick: () => handleRemoveAlbum() },
+      { text: 'Xoá album', icon: faTrash, onClick: () => handleOpenPopupRemoveAlbum() },
     ]
-  }), [openMenu, menuPosition, handleRemoveAlbum]);
+  }), [openMenu, menuPosition, handleOpenPopupRemoveAlbum]);
 
   // CLASS
   const cls = {
     wrap: 'grid grid-cols-5 gap-6 w-full relative',
+    albumAddNewClose: 'size-12 bg-slate-200 absolute top-0 right-0',
   };
 
   // RENDER
   return (
     <>
       <div className={cls.wrap} ref={_albums} data-albums>
-        {listAlbums && listAlbums.map((item, index) => (
+        {listAlbums && listAlbums.map((item) => (
           <AlbumsItem
-            key={index}
+            key={item.id}
             id={item.id}
-            title={item.title}
-            count={item.count}
-            thumb={item.thumb}
-            link={item.link}
+            title={item.name}
+            count={item.sl}
+            thumb={item.thumbnail.thumbUrl}
+            link={`/albums/${item.id}`}
             contextElement={_albums}
             contextMenu={contextMenu.menus}
             onOpenMenu={handleOpenContextMenu}
@@ -250,6 +218,13 @@ export default function Albums() {
             </Cta>
           </Form.InputGroup>
         </form>
+        <button
+          className={cls.albumAddNewClose}
+          onClick={handleClosePopupRenameAlbum}
+        >
+          <FontAwesomeIcon icon={faClose}/>
+          
+        </button>
       </Modal>
       <Alert
         open={alert.open}
@@ -257,9 +232,9 @@ export default function Albums() {
         title={alert.title}
         desc={alert.desc}
         okCta="Đồng ý"
-        onClickOkCta={() => setAlert(data => ({ ...data, open: false }))}
+        onClickOkCta={handleEventRemoveAlbum}
         cancelCta="Không"
-        onClickCancelCta={() => setAlert(data => ({ ...data, open: false }))}
+        onClickCancelCta={handleClosePopupRemoveAlbum}
       />
     </>
   )
