@@ -106,6 +106,10 @@ $routes->group('', ['filter' => 'cors'], static function($routes) {
    *    album_title: <string>
    * }
    */
+  $routes->delete('/albums/remove/(:num)', 'Albums::Remove/$1');
+  /**
+   * NO PARAMS
+   */
   
   /*********************/
   /****** DIRECTORY ****/

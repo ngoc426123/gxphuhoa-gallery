@@ -107,12 +107,13 @@ class Albums extends ResourceController {
 
 		foreach ($albumsData as $key => $value) {
 			$albumsThumb = $albumsModel
-				->select("images.id, images.thumb, images.location")
+				->select("images.name, images.id, images.thumb, images.location")
 				->join("relationships", "relationships.id_albums = albums.id")
 				->join("images", "images.id = relationships.id_images")
-				->where("albums.id", $value["id"])
+				->where(["albums.id" => $value["id"]])
 				->orderBy("images.id", "ASC")
 				->first();
+			$albumsThumb = array_merge($albumsThumb, getImageUrl($albumsThumb));
 			
 			$albumsData[$key]["thumbnail"] = $albumsThumb;
 		}
@@ -126,7 +127,15 @@ class Albums extends ResourceController {
 		return $this->respond($respondData, ResponseInterface::HTTP_OK);
 	}
 
-	public function Detail($id) {
+	public function Detail($id = null) {
+		if (!$id) {
+			$respondData = [
+				"error" => "Thiếu ID",
+			];
+
+			return $this->respond($respondData, ResponseInterface::HTTP_NOT_FOUND);
+		}
+
 		$imagesModel = new ModelImages();
 		$albumsModel = new ModelsAlbums();
 		$albumsData = $albumsModel
@@ -168,6 +177,7 @@ class Albums extends ResourceController {
 
 		helper('text');
 		$albumsModel = new ModelsAlbums();
+		$relationshipsModel = new ModelRelationships();
 		$myTime = Time::now("Asia/Ho_Chi_Minh");
 
 		// CREATE ALBUMS
@@ -193,17 +203,41 @@ class Albums extends ResourceController {
 				"id_images" => $value["id"]
 			];
 		}
-		
-		$relationshipsModel = new ModelRelationships();
+	
 		$relationshipsModel
 			->insertBatch($dataImagesRelationshipInsert);
 
+		// GET ADDED ALBUMS
+		$albumsData = $albumsModel
+			->select("id, name, slug, date, sl")
+			->orderBy("id", "DESC")
+			->where(["id" => $IDAlbumInsert])
+			->first();
+		$albumsThumb = $albumsModel
+			->select("images.name, images.id, images.thumb, images.location")
+			->join("relationships", "relationships.id_albums = albums.id")
+			->join("images", "images.id = relationships.id_images")
+			->where(["albums.id" => $IDAlbumInsert])
+			->orderBy("images.id", "ASC")
+			->first();
+		$albumsThumb = array_merge($albumsThumb, getImageUrl($albumsThumb));
+
+		$albumsData["thumbnail"] = $albumsThumb;
+
 		// RESNPOND DATA
-		$respondData = ["albumsID" => $IDAlbumInsert];
+		$respondData = ["data" => $albumsData];
 		return $this->respond($respondData, ResponseInterface::HTTP_OK);
 	}
 
 	public function Update($id = null) {
+		if (!$id) {
+			$respondData = [
+				"error" => "Thiếu ID",
+			];
+
+			return $this->respond($respondData, ResponseInterface::HTTP_NOT_FOUND);
+		}
+
 		$body = $this->request->getBody();
 		$params = json_decode($body, true);
 
@@ -235,6 +269,28 @@ class Albums extends ResourceController {
 			"albumsID" => $id,
 			"albumsTitle" => $params["album_title"],
 		];
+		return $this->respond($respondData, ResponseInterface::HTTP_OK);
+	}
+
+	public function Remove($id = null) {
+		if (!$id) {
+			$respondData = [
+				"error" => "Thiếu ID",
+			];
+
+			return $this->respond($respondData, ResponseInterface::HTTP_NOT_FOUND);
+		}
+
+		$albumsModel = new ModelsAlbums();
+		$relationshipsModel = new ModelRelationships();
+		$albumsModel
+			->where(["id" => $id])
+			->delete();
+		$relationshipsModel
+			->where(["id_albums" => $id])
+			->delete();
+
+		$respondData = ["albumsID" => $id];
 		return $this->respond($respondData, ResponseInterface::HTTP_OK);
 	}
 }
