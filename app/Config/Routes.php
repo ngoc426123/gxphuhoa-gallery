@@ -98,7 +98,7 @@ $routes->group('', ['filter' => 'cors'], static function($routes) {
    *    list_images: array<images>
    * }
    */
-  $routes->post('/albums/update/(:num)', 'Albums::Update/$1');
+  $routes->put('/albums/update/(:num)', 'Albums::Update/$1');
   /**
    * BODY JSON DATA
    * {
@@ -107,6 +107,10 @@ $routes->group('', ['filter' => 'cors'], static function($routes) {
    * }
    */
   $routes->delete('/albums/remove/(:num)', 'Albums::Remove/$1');
+  /**
+   * NO PARAMS
+   */
+  $routes->put('/albums/append/(:num)', 'Albums::Append/$1');
   /**
    * NO PARAMS
    */

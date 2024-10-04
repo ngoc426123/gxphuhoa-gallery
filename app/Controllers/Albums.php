@@ -293,4 +293,91 @@ class Albums extends ResourceController {
 		$respondData = ["albumsID" => $id];
 		return $this->respond($respondData, ResponseInterface::HTTP_OK);
 	}
+
+	public function Append($id = null) {
+		/**
+		 * HOW TO WORK:
+		 * 1. PUSH ALL IMAGES FROM PARAMS TO $arrayToBeReplace
+		 * 2. GET ALL IMAGES IN ALBUMS AND ADD TO $arrayToBeReplace
+		 * 3. REMOVE DULICATE OF $arrayToBeReplace
+		 * 4. DELETE ALL ROW WITH albums_id IN relationships TABLE
+		 * 5. ADD $arrayToBeReplace TO relationships TABLE
+		 * 6. UPDATE ALBUMS sl
+		 */
+		if ($id == null) {
+			$respondData = [
+				"error" => "Thiếu ID",
+			];
+
+			return $this->respond($respondData, ResponseInterface::HTTP_NOT_FOUND);
+		}
+
+		$body = $this->request->getBody();
+		$params = json_decode($body, true);
+		$albumsModel = new ModelsAlbums();
+		$relationshipsModel = new ModelRelationships();
+		$arrayToBeReplace = [];
+		$dataToBeReplace = [];
+
+		// PUSH ALL IMAGE FROM PARAMS
+		foreach ($params["data"] as $value) {
+			$arrayToBeReplace[] = $value["id"];
+		}
+
+		// GET CURRENT IMAGES IN ALBUMS
+		$relationshipsData = $relationshipsModel
+			->select("id_images")
+			->where(["id_albums" => $id])
+			->findAll();
+
+		foreach ($relationshipsData as $value) {
+			$arrayToBeReplace[] = $value["id_images"];
+		}
+
+		// REMOVE DUPLICATE
+		$arrayToBeReplace = array_unique($arrayToBeReplace);
+
+		// CREATE DATA FOR REPLACE
+		foreach ($arrayToBeReplace as $value) {
+			$dataToBeReplace[] = [
+				"id" => "",
+				"id_albums" => $id,
+				"id_images" => $value,
+			];
+		}
+
+		// REMOVE OLD IMAGES IN ALBUMS
+		$relationshipsModel
+			->where(["id_albums" => $id])
+			->delete();
+
+		// ADD NEWS
+		$relationshipsModel
+			->insertBatch($dataToBeReplace);
+
+		// UPDATE ALBUMS SL
+		$albumsModel
+			->set(["sl" => count($arrayToBeReplace)])
+			->where(["id" => $id])
+			->update();
+
+		// GET ALBUMS
+		$albumsData = $albumsModel
+			->select("id, name, slug, date, sl")
+			->where(["id" => $id])
+			->first();
+		$albumsThumb = $albumsModel
+			->select("images.name, images.id, images.thumb, images.location")
+			->join("relationships", "relationships.id_albums = albums.id")
+			->join("images", "images.id = relationships.id_images")
+			->where(["albums.id" => $id])
+			->orderBy("images.id", "ASC")
+			->first();
+		$albumsThumb = array_merge($albumsThumb, getImageUrl($albumsThumb));
+		$albumsData["thumbnail"] = $albumsThumb;
+
+		// RESPONSE DATA
+		$respondData = ["data" => $albumsData];
+		return $this->respond($respondData, ResponseInterface::HTTP_OK);
+	}
 }
