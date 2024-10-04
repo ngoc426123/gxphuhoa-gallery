@@ -5,20 +5,16 @@ namespace App\Controllers;
 use App\Models\Images as ModelImages;
 use CodeIgniter\RESTful\ResourceController;
 use CodeIgniter\HTTP\ResponseInterface;
+use CodeIgniter\I18n\Time;
 
 class Upload extends ResourceController {
 	public function index(){
 		$image = service("image", "gd");
 		$imagesModel = new ModelImages();
-
-		// DATE
-		$now    = getdate();
-		$second = $now["seconds"];
-		$minute = $now["minutes"];
-		$hour   = $now["hours"];
-		$day    = $now["mday"]; if(strlen($day)==1){$day="0".$day;}
-		$month  = $now["mon"]; if(strlen($month)==1){$month="0".$month;}
-		$year   = $now["year"];
+		$myTime = Time::now("Asia/Ho_Chi_Minh");
+		$year = $myTime->getYear();
+		$month = str_pad($myTime->getMonth(), "0", STR_PAD_LEFT);
+		$locaTime = $myTime->toLocalizedString();
 
 		// DATA RESPONSE
 		$respondData = [];
@@ -44,7 +40,7 @@ class Upload extends ResourceController {
 				"id" => "",
 				"name" => $fileName.".".$fileExtension,
 				"thumb" => $fileName."_thumb".".".$fileExtension,
-				"date" => $day."/".$month."/".$year,
+				"date" => $locaTime,
 				"size" => $fileSize,
 				"type" => $fileMime,
 				"location" => $year . "/" . $month,
@@ -61,11 +57,11 @@ class Upload extends ResourceController {
 			// RESPOND DATA
 			$imageData = [
 				"id" => $imageID,
-				"name" => $fileName.".".$fileExtension,
-				"thumb" => $fileName."_thumb".".".$fileExtension,
-				"location" => $year."/".$month,
-				"date" => $day."/".$month."/".$year,
-				"size" => $fileSize,
+				"name" => $dataInsert["name"],
+				"thumb" => $dataInsert["thumb"],
+				"location" => $dataInsert["location"],
+				"date" => $dataInsert["date"],
+				"size" => $dataInsert["size"],
 			];
 
 			$respondData[] = array_merge($imageData, getImageUrl($imageData));

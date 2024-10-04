@@ -179,13 +179,14 @@ class Albums extends ResourceController {
 		$albumsModel = new ModelsAlbums();
 		$relationshipsModel = new ModelRelationships();
 		$myTime = Time::now("Asia/Ho_Chi_Minh");
+		$locaTime = $myTime->toLocalizedString();
 
 		// CREATE ALBUMS
 		$dataAlbumsInsert = [
 			"id" => "",
 			"name" =>  $params["album_title"],
 			"slug" => url_title(convert_accented_characters(strtolower($params["album_title"]), '-')),
-			"date" => $myTime->toLocalizedString(),
+			"date" => $locaTime,
 			"sl" => count($params["list_images"]),
 			"stt" => 1,
 		];
