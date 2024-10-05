@@ -7,6 +7,7 @@ import { useSelector } from "react-redux";
 // IMAGES
 import { clsx } from "clsx";
 import Cover_img from "../../assets/images/dashboard-cover.svg";
+import Avatar_img from "../../assets/images/avatar.png";
 
 // ICONS
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -106,18 +107,7 @@ export default function Dashbroad() {
       },
     }
   }), [yearsData])
-  const [activities] = useState([
-    { avatar: 'https://fastly.picsum.photos/id/700/100/100.jpg?hmac=piWdXztkLPFsF6n2D-c8d-_Xj4LDXaZ4xJgGXpVQ9gg', name: 'Thức Đỗ', email: 'thucdo123@gmail.com', time: '12:30 08/03/1024' },
-    { avatar: 'https://fastly.picsum.photos/id/700/100/100.jpg?hmac=piWdXztkLPFsF6n2D-c8d-_Xj4LDXaZ4xJgGXpVQ9gg', name: 'Thức Đỗ', email: 'thucdo123@gmail.com', time: '12:30 08/03/1024' },
-    { avatar: 'https://fastly.picsum.photos/id/468/100/100.jpg?hmac=9PvsPN0iS2LwjNELceXwL6QqGZ_k_5REaTKA87h8Xok', name: 'Minh Ngọc', email: 'minhngoc.ith@gmail.com', time: '10:30 08/03/1024' },
-    { avatar: 'https://fastly.picsum.photos/id/76/100/100.jpg?hmac=ml0woYXAgAWkn_dBMBSpXJI7hNZtd8VPsad15xxn_co', name: 'Chung Nguyễn', email: 'chungnguyen.abc@gmail.com', time: '12:30 06/03/1024' },
-    { avatar: 'https://fastly.picsum.photos/id/76/100/100.jpg?hmac=ml0woYXAgAWkn_dBMBSpXJI7hNZtd8VPsad15xxn_co', name: 'Long Đỗ', email: 'dolong123@gmail.com', time: '12:30 06/03/1024' },
-    { avatar: 'https://fastly.picsum.photos/id/76/100/100.jpg?hmac=ml0woYXAgAWkn_dBMBSpXJI7hNZtd8VPsad15xxn_co', name: 'Chung Nguyễn', email: 'chungnguyen.abc@gmail.com', time: '12:30 06/03/1024' },
-    { avatar: 'https://fastly.picsum.photos/id/76/100/100.jpg?hmac=ml0woYXAgAWkn_dBMBSpXJI7hNZtd8VPsad15xxn_co', name: 'Chung Nguyễn', email: 'chungnguyen.abc@gmail.com', time: '12:30 06/03/1024' },
-    { avatar: 'https://fastly.picsum.photos/id/76/100/100.jpg?hmac=ml0woYXAgAWkn_dBMBSpXJI7hNZtd8VPsad15xxn_co', name: 'Long Đỗ', email: 'dolong123@gmail.com', time: '12:30 06/03/1024' },
-    { avatar: 'https://fastly.picsum.photos/id/76/100/100.jpg?hmac=ml0woYXAgAWkn_dBMBSpXJI7hNZtd8VPsad15xxn_co', name: 'Chung Nguyễn', email: 'chungnguyen.abc@gmail.com', time: '12:30 06/03/1024' },
-    { avatar: 'https://fastly.picsum.photos/id/700/100/100.jpg?hmac=piWdXztkLPFsF6n2D-c8d-_Xj4LDXaZ4xJgGXpVQ9gg', name: 'Thức Đỗ', email: 'thucdo123@gmail.com', time: '12:30 08/03/1024' },
-  ]);
+  const [activities, setActivities] = useState([]);
 
   // SIDE EFFECT
   useEffect(() => {
@@ -168,7 +158,16 @@ export default function Dashbroad() {
             yearsNumber: data[8].data.yearsNumber,
             yearsCounter: data[8].data.yearsCounter,
           }
-        })
+        });
+        setActivities(data[9].data.map(item => {
+          const dateSplit = item.date.split(' ');
+          const time = dateSplit[1];
+          const day = dateSplit[0];
+        
+          item = { ...item, time, day }
+
+          return item;
+        }));
       })
   }
 
@@ -197,11 +196,13 @@ export default function Dashbroad() {
     boxChart: 'h-80',
     activitiesBox: 'max-h-80 pr-2 overflow-hidden overflow-y-auto custom-scroll',
     activitiesItem: 'flex items-center mb-3',
-    activitiesAvatar: 'size-10 mr-3 rounded-lg shrink-0 overflow-hidden',
-    activitiesInfo: 'w-[calc(100%-(2.5rem+6rem+(0.75rem*2)))]',
-    activitiesName: 'text-sm font whitespace-nowrap overflow-hidden text-ellipsis',
-    activitiesEmail: 'text-sm font-light whitespace-nowrap overflow-hidden text-ellipsis',
-    activitiesTime: 'w-24 ml-3 text-xs shrink-0',
+    activitiesAvatar: 'size-8 mr-3 rounded-lg shrink-0 overflow-hidden',
+    activitiesInfo: 'w-[calc(100%-(2rem+4rem+(0.75rem*2)))]',
+    activitiesName: 'text-xs font whitespace-nowrap overflow-hidden text-ellipsis',
+    activitiesEmail: 'text-[0.7rem] font-light whitespace-nowrap overflow-hidden text-ellipsis',
+    activitiesDate: 'w-[4rem] ml-3 text-xs text-right shrink-0',
+    activitiesTime: 'block',
+    activitiesDay: 'block',
   }
 
   // RENDER
@@ -260,13 +261,16 @@ export default function Dashbroad() {
               {activities && activities.map((item, index) => (
                 <div className={cls.activitiesItem} key={index}>
                   <div className={cls.activitiesAvatar}>
-                    <img src={item.avatar} alt=""/>
+                    <img src={Avatar_img} alt=""/>
                   </div>
                   <div className={cls.activitiesInfo}>
-                    <p className={cls.activitiesName}>{item.name}</p>
+                    <p className={cls.activitiesName}>{item.displayname}</p>
                     <p className={cls.activitiesEmail}>{item.email}</p>
                   </div>
-                  <div className={cls.activitiesTime}>{item.time}</div>
+                  <div className={cls.activitiesDate}>
+                    <span className={cls.activitiesTime}>{item.time}</span>
+                    <span className={cls.activitiesDay}>{item.day}</span>
+                  </div>
                 </div>
               ))}
             </div>

@@ -21,12 +21,12 @@ export default function Profile() {
   return (
     <div className={cls.wrap} data-profile>
       <div className={cls.avatar}>
-        <img src={Avatar_img} alt={user?.display_name || ''} />
+        <img src={Avatar_img} alt={user?.displayname || ''} />
       </div>
       <div>
         <p className={cls.welcome}>Xin chào</p>
-        <p className={cls.name}><strong>{user?.display_name || ''}</strong></p>
-        <p className={cls.email}>{user?.user_email || ''}</p>
+        <p className={cls.name}><strong>{user?.displayname || ''}</strong></p>
+        <p className={cls.email}>{user?.useremail || ''}</p>
       </div>
     </div>
   );

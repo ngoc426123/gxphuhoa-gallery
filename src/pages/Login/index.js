@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 
 // REDUX
 import { useDispatch } from "react-redux";
-import { setOpenLoading, setUserAuthor } from "../../store/root";
+import { setOpenLoading, setUserAuthen } from "../../store/root";
 
 // IMAGES
 import Cover_img from "../../assets/images/cover.jpg";
@@ -63,12 +63,14 @@ export default function Login() {
 
     dispatch(setOpenLoading(true));
     try {
-      const url = process.env.REACT_APP_LOGIN_API + '/gallery-login';
+      const urlAPI = process.env.REACT_APP_LOGIN_API + '/gallery-login';
+      const urlAPPAPI = process.env.REACT_APP_API + '/activities/create';
       const params = { username, password };
-      const { data } = await axios.post(url, params);
+      const loginData = await axios.post(urlAPI, params);
+      const activitiesData = await axios.post(urlAPPAPI, loginData.data.data);
 
-      dispatch(setUserAuthor(true));
-      setLocalstorage('Gxphuhoa-user', data.data);
+      dispatch(setUserAuthen(true));
+      setLocalstorage('Gxphuhoa-user', activitiesData.data);
       setAlert({
         open: true,
         status: 1,

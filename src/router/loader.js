@@ -9,13 +9,13 @@ export const rootLoader = async () => {
     return redirect('/login');
 
   // USER AUTHORIZATION
-  const { root: { userAuthor } } = store.getState();
+  const { root: { userAuthen } } = store.getState();
 
-  if (userAuthor) return null;
+  if (userAuthen) return null;
 
   try {
-    const { ID } = getLocalstorage('Gxphuhoa-user');
-    const params = { ID };
+    const { userID } = getLocalstorage('Gxphuhoa-user');
+    const params = { ID: userID };
     const url = process.env.REACT_APP_LOGIN_API + '/gallery-author-user';
     const response = await axios.post(url, params);
 

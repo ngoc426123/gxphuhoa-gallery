@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit"
 
 const initialState = {
-  userAuthor: false,
+  userAuthen: false,
   openLoading: false,
   config: {},
 }
@@ -10,8 +10,8 @@ export const root = createSlice({
   name: 'root',
   initialState,
   reducers: {
-    setUserAuthor: (state, action) => {
-      state.userAuthor = action.payload;
+    setUserAuthen: (state, action) => {
+      state.userAuthen = action.payload;
     },
 
     setOpenLoading: (state, action) => {
@@ -24,5 +24,5 @@ export const root = createSlice({
   }
 });
 
-export const { setOpenLoading, setUserAuthor, setConfig } = root.actions;
+export const { setOpenLoading, setUserAuthen, setConfig } = root.actions;
 export default root.reducer;
