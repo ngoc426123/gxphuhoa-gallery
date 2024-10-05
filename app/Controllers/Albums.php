@@ -77,7 +77,7 @@ class Albums extends ResourceController {
 
 		$respondData = ["count" => $result];
 
-		return $this->respond($respondData, ResponseInterface::HTTP_NOT_FOUND);
+		return $this->respond($respondData, ResponseInterface::HTTP_OK);
 	}
 
 	public function List() {

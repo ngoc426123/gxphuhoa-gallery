@@ -39,6 +39,9 @@ $routes->group('', ['filter' => 'cors'], static function($routes) {
   /*********************/
   /******* IMAGES ******/
   $routes->get('/images/count', 'Images::count');
+  /**
+   * NO PARAMS
+   */
   $routes->get('/images/countintime', 'Images::countInTime');
   /**
    * PARAMS IN URL
@@ -71,6 +74,9 @@ $routes->group('', ['filter' => 'cors'], static function($routes) {
   /*********************/
   /****** ALBUMS *******/
   $routes->get('/albums/count', 'Albums::count');
+  /**
+   * NO PARAMS
+   */
   $routes->get('/albums/countintime', 'Albums::countInTime');
   /**
    * PARAMS IN URL
@@ -118,6 +124,9 @@ $routes->group('', ['filter' => 'cors'], static function($routes) {
   /*********************/
   /****** DIRECTORY ****/
   $routes->get('/directory/count', 'Directory::count');
+  /**
+   * NO PARAMS
+   */
   
   /*********************/
   /****** OPTIONS ******/

@@ -75,7 +75,7 @@ class Images extends ResourceController {
 
 		$respondData = ["count" => $result];
 
-		return $this->respond($respondData, ResponseInterface::HTTP_NOT_FOUND);
+		return $this->respond($respondData, ResponseInterface::HTTP_OK);
 	}
 
 	public function CountRecent() {
@@ -93,13 +93,18 @@ class Images extends ResourceController {
 		$currentYear = date('Y');
 		$preYear = $currentYear - ($numberYearRecent - 1);
 		$imagesModel = new ModelsImages();
+		$result = [
+			"yearsNumber" => [],
+			"yearsCounter" => [],
+		];
 
-		for ($i=$preYear; $i <= $currentYear; $i++) { 
+		for ($i = $currentYear; $i >= $preYear; $i--) { 
 			$imageCount = $imagesModel
 				->selectCount("id")
 				->where("SUBSTRING(date, 7, 4)", $i)
 				->first();
-			$result[$i] = $imageCount["id"];
+			$result["yearsNumber"][] = $i;
+			$result["yearsCounter"][] = $imageCount["id"];
 		}
 
 		$respondData = $result;
