@@ -26,11 +26,15 @@ $routes->group('', ['filter' => 'cors'], static function($routes) {
   /*********************/
   /**** ACTIVITIES ****/
   $routes->get('/activities', 'Activities::index');
+  /**
+   * NO PARAMS
+   */
   $routes->post('/activities/create', 'Activities::create');
   /**
    * BODY JSON DATA
    * {
    *    "username": <>,
+   *    "displayname": <>,
    *    "email": <>,
    *    "date": <>,
    * }

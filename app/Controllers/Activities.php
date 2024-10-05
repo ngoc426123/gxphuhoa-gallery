@@ -23,12 +23,17 @@ class Activities extends ResourceController {
 		$ActivitiesModel = new ModelsActivities();
 		$body = $this->request->getBody();
 		$param = json_decode($body);
+		$id = $param->ID;
 		$username = $param->user_login;
+		$displayname = $param->display_name;
 		$email = $param->user_email;
 		$myTime = Time::now("Asia/Ho_Chi_Minh");
 		$date = $myTime->toLocalizedString();
 		$data = [
+			"id" => "",
+			"userID" => $id,
 			"username" => $username,
+			"displayname" => $displayname,
 			"email" => $email,
 			"date" => $date,
 		];
