@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 29, 2024 at 11:33 AM
+-- Generation Time: Oct 05, 2024 at 07:01 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -29,8 +29,10 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `activities` (
   `id` int(11) NOT NULL,
-  `username` varchar(85) NOT NULL,
-  `email` varchar(85) NOT NULL,
+  `userID` int(11) NOT NULL,
+  `username` varchar(65) NOT NULL,
+  `displayname` varchar(65) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `email` varchar(65) NOT NULL,
   `date` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
@@ -38,19 +40,9 @@ CREATE TABLE `activities` (
 -- Dumping data for table `activities`
 --
 
-INSERT INTO `activities` (`id`, `username`, `email`, `date`) VALUES
-(1, 'minhngoc', 'minhngoc.ith@gmail.com', '29/09/2024 12:17:39'),
-(2, 'thucdo', 'thuc.do1988@gmail.com', '29/09/2024 12:18:35'),
-(3, 'vanchung', 'vanchung2003@gmail.com', '29/09/2024 12:18:59'),
-(4, 'vanchung', 'vanchung2003@gmail.com', '29/09/2024 12:19:02'),
-(5, 'minhngoc', 'minhngoc.ith@gmail.com', '29/09/2024 12:19:17'),
-(6, 'vanchung', 'vanchung2003@gmail.com', '29/09/2024 12:19:28'),
-(7, 'do_long', 'do.long67@gmail.com', '29/09/2024 12:20:03'),
-(8, 'do_long', 'do.long67@gmail.com', '29/09/2024 12:20:05'),
-(9, 'vanchung', 'vanchung2003@gmail.com', '29/09/2024 12:20:19'),
-(10, 'vanchung', 'vanchung2003@gmail.com', '29/09/2024 12:20:20'),
-(11, 'thucdo', 'thuc.do1988@gmail.com', '29/09/2024 12:20:36'),
-(12, 'thucdo', 'thuc.do1988@gmail.com', '29/09/2024 12:20:38');
+INSERT INTO `activities` (`id`, `userID`, `username`, `displayname`, `email`, `date`) VALUES
+(20, 3, 'minhngoc', 'Hoàng Minh Ngọc', 'minhngoc.ith@gmail.com', '2024-10-05 11:48:21'),
+(21, 3, 'minhngoc', 'Hoàng Minh Ngọc', 'minhngoc.ith@gmail.com', '2024-10-05 11:58:22');
 
 -- --------------------------------------------------------
 
@@ -27139,7 +27131,7 @@ ALTER TABLE `relationships`
 -- AUTO_INCREMENT for table `activities`
 --
 ALTER TABLE `activities`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT for table `albums`
