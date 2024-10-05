@@ -8,8 +8,13 @@ use CodeIgniter\Router\RouteCollection;
 
 /*********************/
 /* VERY VERY DANGER **/
-$routes->get('/clear-everything', 'ClearEverything::index');
+$routes->get('/clear-everything', 'QueryThings::ClearEverything');
 /* VERY VERY DANGER **/
+/*********************/
+/*********************/
+/* CHANG FORMAT DATE */
+$routes->get('/format-date', 'QueryThings::FormatDate');
+/* CHANG FORMAT DATE */
 /*********************/
 
 $routes->get('/', 'Home::index');

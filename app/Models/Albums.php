@@ -12,7 +12,7 @@ class Albums extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ["id", "name", "slug", "date", "sl", "stt"];
+    protected $allowedFields    = ["id", "name", "slug", "date", "sl", "stt", "date_format"];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;

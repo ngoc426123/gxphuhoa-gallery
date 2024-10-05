@@ -12,7 +12,7 @@ class Images extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ["id", "name", "thumb", "date", "size", "type", "location"];
+    protected $allowedFields    = ["id", "name", "thumb", "date", "size", "type", "location", "date_format"];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
