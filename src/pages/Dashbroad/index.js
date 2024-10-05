@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Bar } from "react-chartjs-2";
 
 // REDUX
@@ -12,24 +12,44 @@ import Cover_img from "../../assets/images/dashboard-cover.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendarDays, faHardDrive, faImages, faRss } from "@fortawesome/free-solid-svg-icons";
 import Box from "../../components/Box";
+import axios from "axios";
 
 export default function Dashbroad() {
   // STATE
   const { config } = useSelector(state => state.root);
-  const [inYearData] = useState({
+  const [dashboardData, setDashboardData] = useState({
+    imagesnumber: 0,
+    albumsNumber: 0,
+    capacityNumber: '0 KB',
+    directory: {
+      months: 0,
+      years: 0,
+      yearStart: 0,
+      yearsEnd: 0
+    },
+    current: {
+      images: 0,
+      albums: 0,
+    }
+  })
+  const [inYearData, setinYearData] = useState({
+    images: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    albums: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  });
+  const memoInYearData = useMemo(() => ({
     data: {
       labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dev'],
       datasets: [
         {
           label: 'Hình ảnh',
-          data: [45, 26, 103, 55, 104, 204, 87, 99, 104, 135, 202, 302],
+          data: inYearData.images,
           borderWidth: 1,
           yAxisID: 'y',
           order: 1,
         },
         {
           label: 'Albums',
-          data: [2, 5, 1, 2, 2, 3, 1, 2, 1, 7, 2, 4],
+          data: inYearData.albums,
           borderWidth: 2,
           type: 'line',
           yAxisID: 'y1',
@@ -54,14 +74,18 @@ export default function Dashbroad() {
         enabled: false
       },
     }
+  }), [inYearData]);
+  const [yearsData, setYearData] = useState({
+    yearsNumber: [0, 0, 0, 0, 0, 0],
+    yearsCounter: [0, 0, 0, 0, 0, 0],
   });
-  const [yearsData] = useState({
+  const memoYearData = useMemo(() => ({
     data: {
-      labels: ['2022', '2023', '2024', '2020', '2018', '2019'],
+      labels: yearsData.yearsNumber,
       datasets: [
         {
           label: 'Hình ảnh',
-          data: [2468, 1892, 1567, 1502, 1190, 892],
+          data: yearsData.yearsCounter,
           borderWidth: 1,
           backgroundColor: '#4bc0c0',
         },
@@ -81,7 +105,7 @@ export default function Dashbroad() {
         enabled: false
       },
     }
-  });
+  }), [yearsData])
   const [activities] = useState([
     { avatar: 'https://fastly.picsum.photos/id/700/100/100.jpg?hmac=piWdXztkLPFsF6n2D-c8d-_Xj4LDXaZ4xJgGXpVQ9gg', name: 'Thức Đỗ', email: 'thucdo123@gmail.com', time: '12:30 08/03/1024' },
     { avatar: 'https://fastly.picsum.photos/id/700/100/100.jpg?hmac=piWdXztkLPFsF6n2D-c8d-_Xj4LDXaZ4xJgGXpVQ9gg', name: 'Thức Đỗ', email: 'thucdo123@gmail.com', time: '12:30 08/03/1024' },
@@ -98,7 +122,55 @@ export default function Dashbroad() {
   // SIDE EFFECT
   useEffect(() => {
     document.title = 'Bảng quản lý - ' + config.site_title;
+    getDashboard();
   }, [config]);
+  
+  // METHOD
+  const getDashboard = async () => {
+    const urlApi = process.env.REACT_APP_API;
+    const now = new Date();
+    const currentMonth = now.getMonth() + 1;
+    const currentYear = now.getFullYear();
+    
+    Promise
+      .all([
+        axios.get(urlApi + '/images/count'),
+        axios.get(urlApi + '/albums/count'),
+        axios.get(urlApi + '/images/capacity'),
+        axios.get(urlApi + '/directory/count'),
+        axios.get(urlApi + `/images/countintime?month=${currentMonth}&year=${currentYear}`),
+        axios.get(urlApi + `/albums/countintime?month=${currentMonth}&year=${currentYear}`),
+        axios.get(urlApi + `/images/countinyear?year=${currentYear}`),
+        axios.get(urlApi + `/albums/countinyear?year=${currentYear}`),
+        axios.get(urlApi + `/images/countrecent?numberyearrecent=6`),
+        axios.get(urlApi + `/activities`),
+      ])
+      .then((data) => {
+        setDashboardData(oldData => ({
+          ...oldData,
+          imagesnumber: data[0].data.count,
+          albumsNumber: data[1].data.count,
+          capacityNumber: data[2].data.capacity,
+          directory: { ...data[3].data },
+          current: {
+            images: data[4].data.count,
+            albums: data[5].data.count,
+          },
+        }));
+        setinYearData(oldData => ({
+          ...oldData,
+          images: data[6].data.count,
+          albums: data[7].data.count,
+        }));
+        setYearData(oldData => {
+          return {
+            ...oldData,
+            yearsNumber: data[8].data.yearsNumber,
+            yearsCounter: data[8].data.yearsCounter,
+          }
+        })
+      })
+  }
 
   // CLASS
   const cls = {
@@ -140,28 +212,28 @@ export default function Dashbroad() {
           <img src={Cover_img} alt=""/>
           <div className={cls.coverDashboardInfo}>
             <span className={cls.coverDashboardText1}>Hình ảnh</span>
-            <span className={cls.coverDashboardText2}>14567</span>
+            <span className={cls.coverDashboardText2}>{dashboardData.imagesnumber}</span>
           </div>
         </div>
         <div className={cls.groupBoxInfo}>
           <div className={clsx(cls.boxInfo, cls.boxInfoBefore, cls.boxAlbums)} data-dashboard-info>
             <span className={cls.boxInfoSubText}>Albums</span>
-            <span className={cls.boxInfoHightText}>273</span>
+            <span className={cls.boxInfoHightText}>{dashboardData.albumsNumber}</span>
             <FontAwesomeIcon icon={faImages} className={cls.boxInfoIcon}/>
           </div>
           <div className={clsx(cls.boxInfo, cls.boxInfoBefore, cls.boxStore)} data-dashboard-info>
             <span className={cls.boxInfoSubText}>Lưu trữ</span>
-            <span className={cls.boxInfoHightText}>1Gb</span>
+            <span className={cls.boxInfoHightText}>{dashboardData.capacityNumber}</span>
             <FontAwesomeIcon icon={faHardDrive} className={cls.boxInfoIcon}/>
           </div>
           <div className={clsx(cls.boxInfo, cls.boxInfoBefore, cls.boxTime)} data-dashboard-info>
-            <span className={cls.boxInfoSubText}>6 năm và 57 tháng</span>
-            <span className={cls.boxInfoHightText}>2019 - 2024</span>
+            <span className={cls.boxInfoSubText}>{dashboardData.directory.years} năm và {dashboardData.directory.months} tháng</span>
+            <span className={cls.boxInfoHightText}>{dashboardData.directory.yearStart} - {dashboardData.directory.yearEnd}</span>
             <FontAwesomeIcon icon={faCalendarDays} className={cls.boxInfoIcon}/>
           </div>
           <div className={clsx(cls.boxInfo, cls.boxInfoBefore, cls.boxNew)} data-dashboard-info>
-            <span className={cls.boxInfoSubText}>142 Hình mới</span>
-            <span className={cls.boxInfoHightText}>2 Albums mới</span>
+            <span className={cls.boxInfoSubText}>{dashboardData.current.images} Hình mới</span>
+            <span className={cls.boxInfoHightText}>{dashboardData.current.albums} Albums mới</span>
             <span className={cls.boxInfoLowText}>(tính trong tháng)</span>
             <FontAwesomeIcon icon={faRss} className={cls.boxInfoIcon}/>
           </div>
@@ -171,14 +243,14 @@ export default function Dashbroad() {
         <div className={cls.col1}>
           <Box title="Trong năm 2024" boxStyle="sky">
             <div className={cls.boxChart}>
-              <Bar { ...inYearData }/>
+              <Bar { ...memoInYearData }/>
             </div>
           </Box>
         </div>
         <div className={cls.col2}>
           <Box title="Các năm gần đây" boxStyle="teal">
             <div className={cls.boxChart}>
-              <Bar { ...yearsData } className={cls.chart}/>
+              <Bar { ...memoYearData } className={cls.chart}/>
             </div>
           </Box>
         </div>
