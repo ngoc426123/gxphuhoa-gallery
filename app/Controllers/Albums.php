@@ -113,9 +113,12 @@ class Albums extends ResourceController {
 				->where(["albums.id" => $value["id"]])
 				->orderBy("images.id", "ASC")
 				->first();
-			$albumsThumb = array_merge($albumsThumb, getImageUrl($albumsThumb));
-			
-			$albumsData[$key]["thumbnail"] = $albumsThumb;
+
+			if ($albumsThumb) {
+				$albumsThumb = array_merge($albumsThumb, getImageUrl($albumsThumb));
+
+				$albumsData[$key]["thumbnail"] = $albumsThumb;
+			}
 		}
 
 		$respondData = [
