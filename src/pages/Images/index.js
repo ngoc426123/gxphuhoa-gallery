@@ -8,7 +8,8 @@ import ListImages from "../../components/ListImages";
 import { useDispatch, useSelector } from "react-redux";
 import { setOpenLoading } from "../../store/root";
 import { selectFile, clearFiles, setOpenManPopup } from "../../store/manfiles";
-import { setListImages } from "../../store/images";
+import { setListImages, setMore, setStart } from "../../store/images";
+import Cta from "../../components/commons/Cta";
 
 export default function Images() {
   const dispatch = useDispatch();
@@ -16,7 +17,7 @@ export default function Images() {
   // STATE
   const { config } = useSelector(state => state.root);
   const { filesSelected } = useSelector(state => state.manfiles);
-  const { listImages } = useSelector(state => state.images);
+  const { listImages, start, perpage, more, } = useSelector(state => state.images);
   const listImagesFill = useMemo(() => {
     if (!listImages) return listImages;
 
@@ -36,16 +37,36 @@ export default function Images() {
     dispatch(setOpenLoading(true));
 
     try {
-      const urlAPI = process.env.REACT_APP_API + '/images/list?start=0&perpage=20';
+      const urlAPI = process.env.REACT_APP_API + `/images/list?start=${start}&perpage=${perpage}`;
       const { data } = await axios.get(urlAPI);
 
       dispatch(setListImages(data.data));
+      dispatch(setMore(data.more));
     } catch(error) {
       console.error(error);
     }
 
     dispatch(setOpenLoading(false));
-  }, [dispatch]);
+  }, [dispatch, start, perpage]);
+
+  const handleEventLoadMore = async () => {
+    const nextStart = start + perpage;
+
+    dispatch(setOpenLoading(true));
+    dispatch(setStart(nextStart));
+
+    try {
+      const urlAPI = process.env.REACT_APP_API + `/images/list?start=${nextStart}&perpage=${perpage}`;
+      const { data } = await axios.get(urlAPI);
+
+      dispatch(setListImages(data.data));
+      dispatch(setMore(data.more));
+    } catch(error) {
+      console.error(error);
+    }
+
+    dispatch(setOpenLoading(false));
+  };
 
   // SIDE EFFECT
   useEffect(() => {
@@ -64,6 +85,7 @@ export default function Images() {
   // CLASS
   const cls = {
     listImages: 'w-full',
+    btnmore: 'py-5 mt-5 text-center'
   };
 
   // RENDER
@@ -75,6 +97,11 @@ export default function Images() {
           onSelectImage={handleClickSelectImage}
         />
       </div>
+      {more && 
+        <div className={cls.btnmore}>
+          <Cta onClick={handleEventLoadMore}>Xem thêm</Cta>
+        </div>
+      }
     </div>
   )
 }

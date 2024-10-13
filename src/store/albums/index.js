@@ -7,7 +7,10 @@ const initialState = {
   titleAddAlbum: '',
   listImagesAlbums: [],
   listImagesAddAlbums: [],
-  listAlbums: null,
+  listAlbums: [],
+  start: 0,
+  perpage: 40,
+  more: true,
 }
 
 export const images = createSlice({
@@ -39,8 +42,16 @@ export const images = createSlice({
     },
 
     setListAlbums: (state, action) => {
-      state.listAlbums = action.payload;
+      state.listAlbums = [...state.listAlbums, ...action.payload];
     },
+
+    setStart: (state, action) => {
+      state.start = action.payload;
+    },
+
+    setMore: (state, action) => {
+      state.more = action.payload;
+    }
   },
 });
 
@@ -52,5 +63,7 @@ export const {
   setListImagesAlbums,
   setListImagesAddAlbums,
   setListAlbums,
+  setStart,
+  setMore,
 } = images.actions;
 export default images.reducer;

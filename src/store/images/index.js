@@ -2,6 +2,9 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   listImages: [],
+  start: 0,
+  perpage: 60,
+  more: true,
 }
 
 export const images = createSlice({
@@ -9,10 +12,18 @@ export const images = createSlice({
   initialState,
   reducers: {
     setListImages: (state, action) => {
-      state.listImages = action.payload;
+      state.listImages = [...state.listImages, ...action.payload];
     },
+
+    setStart: (state, action) => {
+      state.start = action.payload;
+    },
+
+    setMore: (state, action) => {
+      state.more = action.payload;
+    }
   },
 });
 
-export const { setListImages } = images.actions;
+export const { setListImages, setStart, setMore, } = images.actions;
 export default images.reducer;

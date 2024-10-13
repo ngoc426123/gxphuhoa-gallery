@@ -57,7 +57,7 @@ export default function AlbumsItem(props) {
   const cls = {
     albums: 'group w-full mb-6 relative',
     imageWrap: 'mb-1 rounded overflow-hidden',
-    image: 'aspect-[1/1] object-cover', 
+    image: 'aspect-[1/1] object-cover bg-black', 
     info: 'w-full',
     title: 'block mb-1 text-sm',
     count: 'block text-xs text-slate-500',

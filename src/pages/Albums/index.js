@@ -12,9 +12,12 @@ import { Alert } from "../../components/Alert";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClose, faEdit, faEye, faTrash } from "@fortawesome/free-solid-svg-icons";
 
+// IMAGES
+import NullImage_img from "../../assets/images/null-image.jpg";
+
 // REDUX
 import { useDispatch, useSelector } from "react-redux";
-import { setListAlbums } from "../../store/albums";
+import { setListAlbums, setMore, setStart } from "../../store/albums";
 import { setOpenLoading } from "../../store/root";
 
 import axios from "axios";
@@ -26,7 +29,7 @@ export default function Albums() {
   const _albums = useRef();
 
   // STATE
-  const { listAlbums } = useSelector(state => state.albums);
+  const { listAlbums, start, perpage, more } = useSelector(state => state.albums);
   const { config } = useSelector(state => state.root);
   const [currentAlbum, setCurrentAlbum] = useState(0); // STORE ALBUM ID
   const [menuPosition, setMenuPosition] = useState({});
@@ -45,16 +48,17 @@ export default function Albums() {
     dispatch(setOpenLoading(true));
 
     try {
-      const urlApi = process.env.REACT_APP_API + '/albums/list?start=0&perpage=10';
+      const urlApi = process.env.REACT_APP_API + `/albums/list?start=${start}&perpage=${perpage}`;
       const { data } = await axios.get(urlApi);
 
       dispatch(setListAlbums(data.data));
+      dispatch(setMore(data.more));
     } catch(error) {
       console.error(error);
     }
 
     dispatch(setOpenLoading(false));
-  }, [dispatch]);
+  }, [dispatch, start, perpage]);
 
   const handleGetContextMenuPos = (data) => {
     setMenuPosition(oldData => ({...oldData, ...data}))
@@ -157,10 +161,29 @@ export default function Albums() {
     dispatch(setOpenLoading(false));
   };
 
+  const handleEventLoadMore = async () => {
+    const nextStart = start + perpage;
+
+    dispatch(setOpenLoading(true));
+    dispatch(setStart(nextStart));
+
+    try {
+      const urlApi = process.env.REACT_APP_API + `/albums/list?start=${nextStart}&perpage=${perpage}`;
+      const { data } = await axios.get(urlApi);
+
+      dispatch(setListAlbums(data.data));
+      dispatch(setMore(data.more));
+    } catch(error) {
+      console.error(error);
+    }
+
+    dispatch(setOpenLoading(false));
+  };
+
   // SIDE EFFECT
   useEffect(() => {
     document.title = 'Albums - ' + config.site_title;
-    !listAlbums && getList();
+    !listAlbums.length && getList();
   }, [listAlbums, getList, config]);
 
   // CONTEXT MENU
@@ -178,19 +201,20 @@ export default function Albums() {
   const cls = {
     wrap: 'grid grid-cols-5 gap-6 w-full relative',
     albumAddNewClose: 'size-12 bg-slate-200 absolute top-0 right-0',
+    btnmore: 'py-5 mt-5 text-center',
   };
 
   // RENDER
   return (
     <>
       <div className={cls.wrap} ref={_albums} data-albums>
-        {listAlbums && listAlbums.map((item) => (
+        {listAlbums && listAlbums.map((item, index) => (
           <AlbumsItem
-            key={item.id}
+            key={`${item.id}-${index}`}
             id={item.id}
             title={item.name}
             count={item.sl}
-            thumb={item.thumbnail.thumbUrl}
+            thumb={item?.thumbnail?.thumbUrl || NullImage_img}
             link={`/albums/${item.id}`}
             contextElement={_albums}
             contextMenu={contextMenu.menus}
@@ -204,6 +228,11 @@ export default function Albums() {
           onCloseMenu={handleCloseContextMenu}
         />
       </div>
+      {more && 
+        <div className={cls.btnmore}>
+          <Cta onClick={handleEventLoadMore}>Xem thêm</Cta>
+        </div>
+      }
       <Modal open={openModal}>
         <form onSubmit={(e) => e.preventDefault()}>
           <Form.Label text="Tên album"/>
@@ -217,7 +246,7 @@ export default function Albums() {
             />
             <Cta
               type="button"
-              onClick={() => handleEventUpdateAlbumName()}
+              onClick={handleEventUpdateAlbumName}
             >
               OK
             </Cta>

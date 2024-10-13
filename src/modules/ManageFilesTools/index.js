@@ -18,12 +18,17 @@ import {
   setListImagesAddAlbums,
   setTitleAddAlbum,
   setListAlbums,
+  setStart,
+  setMore,
 } from "../../store/albums";
 import { setOpenLoading } from "../../store/root";
 
 // ICONS
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faCheck, faClose, faPlus, faTrash, faX } from "@fortawesome/free-solid-svg-icons"
+
+// IMAGES
+import NullImage_img from "../../assets/images/null-image.jpg";
 
 export default function ManageFilesTools() {
   // STATE
@@ -34,8 +39,18 @@ export default function ManageFilesTools() {
   const { filesUploaded } = useSelector(state => state.uploadfiles);
   const { filesSelected } = useSelector(state => state.manfiles);
   const { listImages } = useSelector(state => state.images);
-  const { idAlbums, titleAlbum, listImagesAlbums, listAlbums } = useSelector(state => state.albums);
-  const { titleAddAlbum, titleAlbumCompare, listImagesAddAlbums } = useSelector(state => state.albums);
+  const {
+    idAlbums,
+    titleAlbum,
+    listImagesAlbums,
+    listAlbums,
+    titleAddAlbum,
+    titleAlbumCompare,
+    listImagesAddAlbums,
+    start,
+    perpage,
+    more,
+  } = useSelector(state => state.albums);
   const [alertRemoveImage, setAlertRemoveImage] = useState({
     open: false,
     status: false,
@@ -178,16 +193,17 @@ export default function ManageFilesTools() {
     dispatch(setOpenLoading(true));
 
     try {
-      const urlApi = process.env.REACT_APP_API + '/albums/list?start=0&perpage=10';
+      const urlApi = process.env.REACT_APP_API + `/albums/list?start=${start}&perpage=${perpage}`;
       const { data } = await axios.get(urlApi);
 
       dispatch(setListAlbums(data.data));
+      dispatch(setMore(data.more));
     } catch(error) {
       console.error(error);
     }
 
     dispatch(setOpenLoading(false));
-  }, [dispatch]);
+  }, [dispatch, start, perpage]);
 
   const handleEventAppendImageToAlbum = async ($albumID) => {
     dispatch(setOpenLoading(true));
@@ -215,9 +231,28 @@ export default function ManageFilesTools() {
     dispatch(setOpenLoading(false));
   }
 
+  const handleEventLoadMoreAlbums = async () => {
+    const nextStart = start + perpage;
+
+    dispatch(setOpenLoading(true));
+    dispatch(setStart(nextStart));
+
+    try {
+      const urlApi = process.env.REACT_APP_API + `/albums/list?start=${nextStart}&perpage=${perpage}`;
+      const { data } = await axios.get(urlApi);
+
+      dispatch(setListAlbums(data.data));
+      dispatch(setMore(data.more));
+    } catch(error) {
+      console.error(error);
+    }
+
+    dispatch(setOpenLoading(false));
+  };
+
   // SIDE EFFECT
   useEffect(() => {
-    !listAlbums && getListAlbums();
+    !listAlbums.length && getListAlbums();
   }, [listAlbums, getListAlbums]);
 
   // CLASS
@@ -241,6 +276,8 @@ export default function ManageFilesTools() {
     albumAddItemImage: 'size-10 mr-4 rounded-lg overflow-hidden shrink-0',
     albumAddItemImg: 'size-16',
     albumAddItemName: 'text-sm',
+    ctaMoreWrap: 'text-center',
+    ctaMore: 'text-center text-sm text-slate-400 italic outline-0 transition-all hover:text-blue-600',
   }), [filesSelected, titleAddAlbum, avaiableCTAEditAlbums]);
 
   // RENDER
@@ -308,18 +345,29 @@ export default function ManageFilesTools() {
             </button>
           </div>
           <div className={cls.albumAddList}>
-            {listAlbums && listAlbums.map(item => (
+            {listAlbums && listAlbums.map((item, index) => (
               <div
-                key={item.id}
+                key={`${item.id}-${index}`}
                 className={cls.albumAddItem}
                 onClick={() => handleEventAppendImageToAlbum(item.id)}
               >
                 <div className={cls.albumAddItemImage}>
-                  <img src={item.thumbnail.thumbUrl} className={cls.albumAddItemImg} alt=""/>
+                  <img src={item?.thumbnail?.thumbUrl || NullImage_img} className={cls.albumAddItemImg} alt=""/>
                 </div>
                 <div className={cls.albumAddItemName}>{item.name}</div>
               </div>
             ))}
+            {more && 
+              <div className={cls.ctaMoreWrap}>
+                <button
+                  type="button"
+                  className={cls.ctaMore}
+                  onClick={handleEventLoadMoreAlbums}
+                >
+                  Xem thêm
+                </button>
+              </div>
+            }
           </div>
           <button
             className={cls.albumAddNewClose}
