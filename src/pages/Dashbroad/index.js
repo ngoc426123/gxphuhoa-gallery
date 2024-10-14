@@ -7,10 +7,13 @@ import { useSelector } from "react-redux";
 // IMAGES
 import { clsx } from "clsx";
 import Avatar_img from "../../assets/images/avatar.png";
-import Dawn_img from "../../assets/images/dashboard-dawn.jpg";
-import Morning_img from "../../assets/images/dashboard-morning.jpg";
-import Evening_img from "../../assets/images/dashboard-evening.jpg";
-import Night_img from "../../assets/images/dashboard-night.jpg";
+import Time1_img from "../../assets/images/1.jpg";
+import Time2_img from "../../assets/images/2.jpg";
+import Time3_img from "../../assets/images/3.jpg";
+import Time4_img from "../../assets/images/4.jpg";
+import Time5_img from "../../assets/images/5.jpg";
+import Time6_img from "../../assets/images/6.jpg";
+import Time7_img from "../../assets/images/7.jpg";
 
 // ICONS
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -111,26 +114,19 @@ export default function Dashbroad() {
     }
   }), [yearsData])
   const [activities, setActivities] = useState([]);
-  const [timeOfDay] = useState(() => {
+  const [imageOfDay] = useState(() => {
     const now = new Date();
     const hours = now.getHours();
 
-    if (4 <= hours && hours < 6) return 1 // dawn
-    if (6 <= hours && hours < 15) return 2 // morning
-    if (15 <= hours && hours < 18) return 3 // evening
-    if (18 <= hours && hours < 4) return 4 // night
-
-    return 0;
+    if (4 <= hours && hours < 6) return Time1_img
+    if (6 <= hours && hours < 9) return Time2_img
+    if (9 <= hours && hours < 12) return Time3_img
+    if (12 <= hours && hours < 15) return Time4_img
+    if (15 <= hours && hours < 18) return Time5_img
+    if (18 <= hours && hours < 22) return Time6_img
+    if (22 <= hours || hours < 4) return Time7_img
+    return Time1_img;
   });
-  const imageOfDay = useMemo(() => {
-    switch (timeOfDay) {
-      case 1: return Dawn_img;
-      case 2: return Morning_img;
-      case 3: return Evening_img;
-      case 4: return Night_img;
-      default: return Morning_img;
-    }
-  }, [timeOfDay]);
 
   // SIDE EFFECT
   useEffect(() => {
