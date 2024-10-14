@@ -40,8 +40,8 @@ class Albums extends ResourceController {
 		$albumsCount = $albumsModel
 			->selectCount("id")
 			->where([
-				"SUBSTRING(date, 4, 2)" => padding_number($month, 2),
-				"SUBSTRING(date, 7, 4)" => $year,
+				"SUBSTRING(date, 9, 2)" => padding_number($month, 2),
+				"SUBSTRING(date, 1, 4)" => $year,
 			])
 			->first();
 		$respondData = [ "count" => $albumsCount["id"] ];
@@ -68,8 +68,8 @@ class Albums extends ResourceController {
 			$albumCount = $albumsModel
 				->selectCount("id")
 				->where([
-					"SUBSTRING(date, 4, 2)" => padding_number($i, 2),
-					"SUBSTRING(date, 7, 4)" => $year,
+					"SUBSTRING(date, 9, 2)" => padding_number($i, 2),
+					"SUBSTRING(date, 1, 4)" => $year,
 				])
 				->first();
 			$result[] = $albumCount["id"];

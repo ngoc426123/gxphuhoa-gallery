@@ -38,8 +38,8 @@ class Images extends ResourceController {
 		$imagesCount = $imagesModel
 			->selectCount("id")
 			->where([
-				"SUBSTRING(date, 4, 2)" => padding_number($month, 2),
-				"SUBSTRING(date, 7, 4)" => $year,
+				"SUBSTRING(date, 9, 2)" => padding_number($month, 2),
+				"SUBSTRING(date, 1, 4)" => $year,
 			])
 			->first();
 		$respondData = [ "count" => $imagesCount["id"] ];
@@ -66,8 +66,8 @@ class Images extends ResourceController {
 			$imageCount = $imagesModel
 				->selectCount("id")
 				->where([
-					"SUBSTRING(date, 4, 2)" => padding_number($i, 2),
-					"SUBSTRING(date, 7, 4)" => $year,
+					"SUBSTRING(date, 9, 2)" => padding_number($i, 2),
+					"SUBSTRING(date, 1, 4)" => $year,
 				])
 				->first();
 			$result[] = $imageCount["id"];
@@ -101,7 +101,7 @@ class Images extends ResourceController {
 		for ($i = $currentYear; $i >= $preYear; $i--) { 
 			$imageCount = $imagesModel
 				->selectCount("id")
-				->where("SUBSTRING(date, 7, 4)", $i)
+				->where("SUBSTRING(date, 1, 4)", $i)
 				->first();
 			$result["yearsNumber"][] = $i;
 			$result["yearsCounter"][] = $imageCount["id"];
