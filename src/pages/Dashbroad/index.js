@@ -6,8 +6,11 @@ import { useSelector } from "react-redux";
 
 // IMAGES
 import { clsx } from "clsx";
-import Cover_img from "../../assets/images/dashboard-cover.svg";
 import Avatar_img from "../../assets/images/avatar.png";
+import Dawn_img from "../../assets/images/dashboard-dawn.jpg";
+import Morning_img from "../../assets/images/dashboard-morning.jpg";
+import Evening_img from "../../assets/images/dashboard-evening.jpg";
+import Night_img from "../../assets/images/dashboard-night.jpg";
 
 // ICONS
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -108,6 +111,26 @@ export default function Dashbroad() {
     }
   }), [yearsData])
   const [activities, setActivities] = useState([]);
+  const [timeOfDay] = useState(() => {
+    const now = new Date();
+    const hours = now.getHours();
+
+    if (4 <= hours && hours < 6) return 1 // dawn
+    if (6 <= hours && hours < 15) return 2 // morning
+    if (15 <= hours && hours < 18) return 3 // evening
+    if (18 <= hours && hours < 4) return 4 // night
+
+    return 0;
+  });
+  const imageOfDay = useMemo(() => {
+    switch (timeOfDay) {
+      case 1: return Dawn_img;
+      case 2: return Morning_img;
+      case 3: return Evening_img;
+      case 4: return Night_img;
+      default: return Morning_img;
+    }
+  }, [timeOfDay]);
 
   // SIDE EFFECT
   useEffect(() => {
@@ -177,8 +200,8 @@ export default function Dashbroad() {
     rowDashboard: 'grid grid-cols-2 gap-5 mb-5',
     coverDashboard: 'rounded-lg overflow-hidden relative',
     coverDashboardInfo: 'text-right absolute top-8 right-8',
-    coverDashboardText1: 'block text-lg text-sky-700 font-thin',
-    coverDashboardText2: 'block text-5xl text-sky-800 font-bold',
+    coverDashboardText1: 'block text-lg text-white font-thin',
+    coverDashboardText2: 'block text-5xl text-white font-bold',
     groupBoxInfo: 'grid grid-cols-2 grid-rows-2 gap-5',
     boxInfo: 'w-full px-5 py-5 bg-black rounded-lg text-slate-100 overflow-hidden relative',
     boxInfoBefore: 'before before:w-[150%] before:h-[120%] before:bg-slate-900/20 before:absolute before:rotate-[-25deg] before:top-[3rem] before:left-[1rem] before:pointer-events-none',
@@ -210,7 +233,7 @@ export default function Dashbroad() {
     <div className={cls.wrap} data-dashboard>
       <div className={cls.rowDashboard}>
         <div className={cls.coverDashboard} data-dashboard-cover>
-          <img src={Cover_img} alt=""/>
+          <img src={imageOfDay} alt=""/>
           <div className={cls.coverDashboardInfo}>
             <span className={cls.coverDashboardText1}>Hình ảnh</span>
             <span className={cls.coverDashboardText2}>{dashboardData.imagesnumber}</span>
